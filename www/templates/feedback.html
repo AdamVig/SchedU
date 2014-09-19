@@ -1,0 +1,36 @@
+<ion-view>
+  <ion-content>
+    <div class="center-container">
+      <a class="center-content" href>
+        <img class="logo" src="img/logo.svg" alt="SchedU Logo">
+      </a>
+    </div>
+    <a class="reverse" href="#/schedule">
+      <button class="back-button button-clear">
+        <i class="ion-arrow-left-c"></i> Schedule
+      </button>
+    </a>
+    <ion-list>
+      <div class="list-page-heading item text-center">
+        <div ng-show="userVotes>0">
+          <h3>Tap an item to vote for it.</h3>
+          <h3>You have {{userVotes}} vote<span ng-show="userVotes!=1">s</span> left.</h3>
+        </div>
+        <div ng-show="userVotes==0">
+          <h3>You're out of votes.</h3>
+          <h3>Thanks for your feedback!</h3>
+        </div>
+      </div>
+      <a class="item feedback-list-item item-text-wrap item-icon-left" href
+          ng-click="voteOnItem($index, item.doc._id)" 
+          ng-class="{'active': feedbackVotes[$index].selected}" 
+          ng-repeat="item in feedbackList">
+        <h2>
+          <i class="icon ion-android-checkmark"></i>
+          {{item.doc.name}}
+        </h2>
+      </a>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

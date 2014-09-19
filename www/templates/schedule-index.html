@@ -1,0 +1,34 @@
+
+<ion-view>
+  <ion-content>
+    <div class="center-container">
+      <a class="center-content" href="#">
+        <img class="logo" src="img/logo.svg" alt="SchedU Logo">
+      </a>
+    </div>
+    <a class="reverse" href="#/login">
+      <button class="back-button button-clear">
+        <i class="ion-arrow-left-c"></i> Sign out
+      </button>
+    </a>
+    <ion-list class="class-list">
+      <div class="list-page-heading item text-center">
+        <h3>{{todaysDate}}</h3>
+        <h3>{{dayOfWeek}}<span ng-show="daySchedule">{{daySchedule}}</span></h3>
+      </div>
+      <ion-item class="schedule-item" ng-repeat="class in classOrder">
+
+        <div class="day-letter" ng-style="dayLetterColors.{{class.letter}}">{{class.letter}}</div>
+        <h2 class="class-name">{{class.times.start}} {{class.name}}</h2>
+
+      </ion-item>
+      <a class="item schedule-item item-icon-right" href="#/feedback">
+        <div class="day-letter schedu-letter">
+          <img src="img/u.svg" height="40" width="40" alt="">
+        </div>
+        <h2>Give feedback... <i class="icon ion-chevron-right"></i></h2>
+      </a>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

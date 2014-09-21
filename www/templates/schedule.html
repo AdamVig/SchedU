@@ -12,9 +12,12 @@
       </button>
     </a>
     <ion-list class="class-list">
-      <div class="list-page-heading item text-center">
-        <h3>{{todaysDate}}</h3>
-        <h3>{{dayOfWeek}}<span ng-show="daySchedule">{{daySchedule}}</span></h3>
+      <div class="list-page-heading item text-center date-header" ng-click="dateShow = !dateShow">
+        <h3 ng-show="dateShow">{{todaysDate}}</h3>
+        <h3 ng-hide="dateShow">
+          {{dayOfWeek}}
+          <span ng-show="daySchedule">{{daySchedule}}</span>
+        </h3>
       </div>
       <ion-item class="schedule-item" ng-repeat="class in classOrder">
 

@@ -7,7 +7,7 @@ angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers'])
 
     .state('schedule', {
       url: '/schedule',
-      templateUrl: 'templates/schedule-index.html',
+      templateUrl: 'templates/schedule.html',
       controller: 'ScheduleCtrl'
     })
 

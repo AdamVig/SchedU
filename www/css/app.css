@@ -21,6 +21,9 @@
 /**
  * Schedule Page
  */
+.date-header {
+  height: 35px;
+}
 .class-list .schedule-item {
   padding-top: 10px;
   padding-bottom: 5px;

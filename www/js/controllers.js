@@ -2,6 +2,9 @@ angular.module('schedu.controllers', [])
 
 .controller('ScheduleCtrl', function($scope, $ionicLoading, $state, UserDB, ClassOrder) {
 
+    // Set date toggle variable
+    $scope.dateShow = false;
+
     
     /////////////////////////////////
     // PERIOD LETTER SQUARE COLORS //

@@ -1,7 +1,8 @@
 angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers'])
 
+.constant("dbUrl", "https://schedu.cloudant.com/")
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, dbUrl) {
 
   $stateProvider
 

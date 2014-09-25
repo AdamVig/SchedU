@@ -72,7 +72,7 @@ angular.module('schedu.controllers', [])
 
 })
 
-.controller('RegisterCtrl', function($scope, $state, $ionicLoading, $ionicPopup, UserDB, RegisterService) {
+.controller('RegisterCtrl', function($scope, $state, $ionicLoading, $ionicPopup, UserDB, ClassDaysService) {
 
     $scope.register = function (formData) {
 
@@ -84,10 +84,9 @@ angular.module('schedu.controllers', [])
 
             if (currentPeriod.days) {
 
-                var bothClassDays = RegisterService.classDays(currentPeriod.days);
+                var bothClassDays = ClassDaysService.make(currentPeriod.days);
                 currentPeriod.days = bothClassDays.primary;
-                currentPeriod.alternate.days = bothClassDays.other;
-
+                currentPeriod.alternate.days = bothClassDays.alternate;
             }
 
             formData[dayLetter] = currentPeriod;
@@ -116,7 +115,7 @@ angular.module('schedu.controllers', [])
         UserDB.addUser(formData).then(function (response) {
 
             // Conflict, user already exists
-            if (response.err.status == 409) {
+            if (response.error.status == 409) {
                 
                 $ionicLoading.hide();
                 $state.go("register");
@@ -139,7 +138,7 @@ angular.module('schedu.controllers', [])
                 });
 
             // Unknown error
-            } else if (response.err) {
+            } else if (response.error) {
 
                 $ionicLoading.hide();
                 $state.go("register");

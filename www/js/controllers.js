@@ -54,6 +54,8 @@ angular.module('schedu.controllers', [])
 
 .controller('RegisterCtrl', function($scope, $state, LoadingFactory, $ionicPopup, DataService, ClassDaysFactory, StorageService) {
 
+    $scope.periodLetters = ['a','b','c','d','e','f','g'];
+
     $scope.register = function (formData) {
 
         // Figure out class days for all periods

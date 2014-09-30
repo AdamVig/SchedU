@@ -28,7 +28,7 @@
         </small>
         <label class="item item-input">
           <span class="input-label">Phone Number</span>
-          <input type="tel" ng-minlength="12" ng-maxlength="12" required ng-pattern="/[1-9-]/" ng-model="formData.phoneNumber" name="phoneNumber">
+          <input type="tel" ng-minlength="12" ng-maxlength="12" required ng-pattern="/[1-9-]/" ng-model="formData.phoneNumber" ng-model-options="{ updateOn: 'blur' }" name="phoneNumber">
         </label>
         <small class="error item" ng-show="registerForm.phoneNumber.$invalid && registerForm.phoneNumber.$dirty">
           Doesn't look like a phone number. Try again! <span class="tel-example">Like this: 555-555-5555.</span>
@@ -36,10 +36,10 @@
         <label class="item item-input item-select">
           <div class="input-label">Grade</div>
           <select ng-model="formData.grade">
-            <option value="9">Freshman - 9</option>
-            <option value="10">Sophomore - 10</option>
-            <option value="11">Junior - 11</option>
-            <option value="12">Senior - 12</option>
+            <option value="9">9 - Freshman</option>
+            <option value="10">10 - Sophomore</option>
+            <option value="11">11 - Junior</option>
+            <option value="12">12 - Senior</option>
             <option value="teacher">Teacher</option>
           </select>
         </label>

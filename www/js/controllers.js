@@ -60,12 +60,8 @@ angular.module('schedu.controllers', [])
         formData = ClassDaysFactory.make(formData);
 
         LoadingFactory.show();
-
-        ////////////////////////////////////////
-        // CAPITALIZE FIRST LETTER OF STRINGS //
-        ////////////////////////////////////////
-        //@TODO: move capitalization function to register service
         
+
 
         ////////////////////////////////////////////////
         // ADD USER TO DATABASE, STORE, SHOW SCHEDULE //

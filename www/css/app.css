@@ -19,6 +19,38 @@
   font-size: 1.5em;
 }
 /**
+ * Loader
+ */
+.loader-container {
+ position: relative;
+}
+.u-white-container {
+ position: absolute;
+ top: 0;
+ left: 0;
+ overflow: hidden;
+ -webkit-animation: loader-fill 2s infinite alternate;
+         animation: loader-fill 2s infinite alternate;
+}
+
+@-webkit-keyframes loader-fill {
+ 0% {
+   height: 100%;
+ }
+ 100% {
+   height: 0;
+ }
+}
+
+@keyframes loader-fill {
+ 0% {
+   height: 0;
+ }
+ 100% {
+   height: 100%;
+ }
+}
+/**
  * Schedule Page
  */
 .date-header {

@@ -13,10 +13,10 @@
     </a>
     <ion-list class="class-list">
       <div class="list-page-heading item text-center date-header" ng-click="dateShow = !dateShow">
-        <h3 ng-show="dateShow">{{todaysDate}}</h3>
+        <h3 ng-show="dateShow">{{formattedDate.todaysDate}}</h3>
         <h3 ng-hide="dateShow">
-          {{dayOfWeek}}
-          <span ng-show="daySchedule">{{daySchedule}}</span>
+          {{formattedDate.dayOfWeek}}
+          <span ng-show="scheduleString"> - Day {{scheduleString}}</span>
         </h3>
       </div>
       <ion-item class="schedule-item" ng-repeat="class in classOrder">

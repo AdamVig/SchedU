@@ -1,14 +1,9 @@
 angular.module('schedu.controllers', [])
 
-.controller('ScheduleCtrl', function($scope, $ionicLoading, $state, UserDB, ClassOrder) {
+.controller('ScheduleCtrl', function($scope, LoadingFactory, $state, DataService, StorageService, ClassOrderFactory, DateFactory) {
 
     // Set date toggle variable
     $scope.dateShow = false;
-
-    
-    /////////////////////////////////
-    // PERIOD LETTER SQUARE COLORS //
-    /////////////////////////////////
     
     // From FlatUI Colors
     $scope.dayLetterColors = {
@@ -21,104 +16,67 @@ angular.module('schedu.controllers', [])
         "G": {"background-color": "#3498db"},
         "Sp": {"background-color": "#34495e"}
     };
-
-    ///////////////////////
-    // GENERATE SCHEDULE //
-    ///////////////////////
     
-    $ionicLoading.show({
-      template: 'Loading...'
-    });
+    LoadingFactory.show();
     
     // Get user data object or "undefined"
-    var localUser = localStorage.getItem('SchedUser');
+    var localUser = StorageService.getUser();
 
-    if (localUser == "undefined") {
+    if (localUser) {
 
-        $ionicLoading.hide();
-        $scope.noUserFound = true;
-        $state.go("login");
-
-    // Local user exists
-    } else if (localUser !== null) {
+        // Create and format date
+        var date = DateFactory.currentDay();
+        var dateString = date.format('MM-DD-YY');
+        $scope.formattedDate = DateFactory.formatDate(date);
         
-        // Get day schedule in "A1" format
-        ClassOrder.getDaySchedule().then(function (scheduleData) {
-            $scope.dayOfWeek = scheduleData.dayOfWeek;
-            $scope.todaysDate = scheduleData.todaysDate;
-            $scope.daySchedule = scheduleData.daySchedule;
+        // Get schedule, parse into A1 format, then make class order
+        DataService.getSchedule(dateString).then(function (response) {
+
+            var scheduleObject = response.data;
+
+            // Parse schedule object into A1 format
+            $scope.scheduleString = ClassOrderFactory.parseSchedule(scheduleObject);
+
+            // Make class order, hide loader
+            $scope.classOrder = ClassOrderFactory.make(localUser, scheduleObject);
+            LoadingFactory.hide();
         });
 
-        // Parse user data into object format
-        var userData = JSON.parse(localUser);
-
-        // Make schedule, hide loading overlay
-        ClassOrder.make(userData, function (classOrder) {
-            $scope.classOrder = classOrder;
-            $ionicLoading.hide();
-        });
-        
     // No data in local storage, redirect to login page
     } else {
 
-        $ionicLoading.hide();
+        LoadingFactory.hide();
+        $scope.noUserFound = true;
         $state.go("login");
     }
 
-    $scope.clearData = function () {
-        localStorage.removeItem("SchedUser");
-        $state.go("login");
-    };
-
 })
 
-.controller('RegisterCtrl', function($scope, $state, $ionicLoading, $ionicPopup, UserDB, ClassDaysService) {
+.controller('RegisterCtrl', function($scope, $state, LoadingFactory, $ionicPopup, DataService, ClassDaysFactory, StorageService) {
 
     $scope.register = function (formData) {
 
-        var dayLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+        // Figure out class days for all periods
+        formData = ClassDaysFactory.make(formData);
 
-        _.each(dayLetters, function (dayLetter, index, list) {
-
-            var currentPeriod = formData[dayLetter];
-
-            if (currentPeriod.days) {
-
-                var bothClassDays = ClassDaysService.make(currentPeriod.days);
-                currentPeriod.days = bothClassDays.primary;
-                currentPeriod.alternate.days = bothClassDays.alternate;
-            }
-
-            formData[dayLetter] = currentPeriod;
-        });
-
-
-        $ionicLoading.show({
-          template: 'Loading...'
-        });
+        LoadingFactory.show();
 
         ////////////////////////////////////////
         // CAPITALIZE FIRST LETTER OF STRINGS //
         ////////////////////////////////////////
-        function capitalizeFirstLetter(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
-        formData.firstName = capitalizeFirstLetter(formData.firstName);
-        formData.lastName = capitalizeFirstLetter(formData.lastName);
-        _.each(dayLetters, function (dayLetter) {
-            formData[dayLetter].name = capitalizeFirstLetter(formData[dayLetter].name);
-        });
+        //@TODO: move capitalization function to register service
+        
 
         ////////////////////////////////////////////////
         // ADD USER TO DATABASE, STORE, SHOW SCHEDULE //
         ////////////////////////////////////////////////
-        UserDB.addUser(formData).then(function (response) {
+        
+        DataService.createUser(formData).then(function (response) {
 
             // Conflict, user already exists
             if (response.error.status == 409) {
                 
-                $ionicLoading.hide();
-                $state.go("register");
+                LoadingFactory.hide();
                 $ionicPopup.show({
                     template: 'A user already exists with this phone number. ' + 
                                 'Is it you? You can either change your phone ' +
@@ -140,25 +98,22 @@ angular.module('schedu.controllers', [])
             // Unknown error
             } else if (response.error) {
 
-                $ionicLoading.hide();
-                $state.go("register");
+                LoadingFactory.hide();
                 $ionicPopup.show({
                     template: 'Something went wrong. Contact ' +
-                                'info@getschedu.com if this keeps happening.',
+                              'info@getschedu.com if this keeps happening.',
                     title: 'Sorry!',
                     scope: $scope,
                     buttons: [
-                      { text: 'Try again' }
+                        {text: 'Try again'}
                     ]
                 });
 
             // No errors
             } else {
-                // Store user data in local storage
-                var localData = JSON.stringify(formData);
-                window.localStorage.setItem('SchedUser', localData);
-
-                $ionicLoading.hide();
+                
+                StorageService.storeUser(formData);
+                LoadingFactory.hide();
 
                 // Redirect to schedule page
                 $state.go("schedule");
@@ -169,41 +124,48 @@ angular.module('schedu.controllers', [])
 
 })
 
-.controller('LoginCtrl', function($scope, $state, UserDB, $ionicLoading) {
+.controller('LoginCtrl', function($scope, $state, $ionicLoading, LoadingFactory, DataService, StorageService) {
 
 
     $scope.submittedInvalid = false;
     $scope.submittedValid = false;
 
     $scope.login = function (loginForm, phoneNumber) {
-        
-        $ionicLoading.show({
-          template: 'Loading...'
-        });
+
+        // Reset errors
+        $scope.submittedInvalid = false;
+        $scope.submittedValid = false;
+        $scope.noUserFound = false;
+        $scope.unknownError = false;
+
+        LoadingFactory.show();
 
         if (loginForm.phoneNumber.$valid) {
 
             $scope.submittedValid = true;
 
             // Get user data by phone number ID
-            UserDB.getUser(phoneNumber).then(function (userData) {
+            DataService.getUser(phoneNumber).then(function (response) {
 
-                // Store user data in local storage
-                var localData = JSON.stringify(userData);
-                window.localStorage.setItem('SchedUser', localData);
+                LoadingFactory.hide();
 
-                $ionicLoading.hide();
+                if (!response.error) {
+                    // Store user data in local storage
+                    StorageService.storeUser(response.data);
 
-                if (localStorage.getItem('SchedUser') == "undefined") {
-                    $scope.noUserFound = true;
-                } else {
                     // Redirect to schedule page
                     $state.go("schedule");
+                } else if (response.error.status == 404) {
+                    // Show "not found" error message
+                    $scope.noUserFound = true;
+                } else {
+                    // Show general error message
+                    $scope.unknownError = true;
                 }
-
             });
+
         } else {
-            $ionicLoading.hide();
+            LoadingFactory.hide();
             $scope.submittedInvalid = true;
         }
 
@@ -211,82 +173,56 @@ angular.module('schedu.controllers', [])
 
 })
 
-.controller('FeedbackCtrl', function($scope, $state, $ionicLoading, FeedbackDB, UserDB) {
+.controller('FeedbackCtrl', function($scope, $state, LoadingFactory, DataService, StorageService) {
 
-    $ionicLoading.show({
-      template: 'Loading...'
-    });
+    LoadingFactory.show();
 
-    // Get user data object or "undefined"
-    var localUser = localStorage.getItem('SchedUser');
+    // Get user data object (false if not available)
+    var localUser = StorageService.getUser();
 
     // Redirect to login if no user data
-    if (localUser == "undefined" || localUser == null) {
+    if (!localUser) {
         $state.go("login");
-        $ionicLoading.hide();
-    } else {
-        // Parse user data into object format
-        var userData = JSON.parse(localUser);
+        LoadingFactory.hide();
     }
 
     // Get number of votes from user
-    $scope.userVotes = userData.feedback.votes;
-
-    $scope.feedbackVotes = [];
+    $scope.feedback = localUser.feedback;
     
-    // Retrieve feedback list from database, hide loader
-    FeedbackDB.getList().then(function (data) {
-        $scope.feedbackList = data['response'];
-        $ionicLoading.hide();
-    
-        // Select user selections from previous sessions
-        _.each(userData.feedback.voteItems, function (feedbackItem) {
-
-            // Find matching item in actual list of feedback items
-            var matchingItem = _.findWhere($scope.feedbackList, {"id": feedbackItem.id});
-
-            if (matchingItem != undefined) {
-
-                var matchingItemIndex = _.indexOf($scope.feedbackList, matchingItem);
-                $scope.feedbackVotes[matchingItemIndex] = {
-                    "selected": true,
-                    "id": feedbackItem.id
-                };
-            }
-
-        });
+    // Retrieve feedback items list from database, hide loader
+    DataService.getFeedbackItems().then(function (response) {
+        $scope.feedbackItems = response.data;
+        LoadingFactory.hide();
     });
 
     /**
      * Toggle vote status on a given item
      * @param  {Integer} index Index of tapped item in feedback list
      */
-    $scope.voteOnItem = function (itemIndex, itemId) {
+    $scope.voteOnItem = function (itemId) {
 
-        // Decide if item is selected
-        // If object exists for item
-        if ($scope.feedbackVotes[itemIndex]) {
+        var itemIsSelected = _.contains($scope.feedback.voteItems, itemId);
 
-            var itemIsSelected = $scope.feedbackVotes[itemIndex].selected;
+        // If not selected, add to list of selected items
+        if ($scope.feedback.votes > 0 && !itemIsSelected) {
 
-        // No object exists; can't be selected
-        } else {
-            var itemIsSelected = false;
-        }
+            // Add item to voteItems list
+            $scope.feedback.voteItems.push(itemId);
 
-        // If not selected, set selected to 'true'
-        if ($scope.userVotes > 0 && !itemIsSelected) {
-            $scope.feedbackVotes[itemIndex] = {
-                "selected": true,
-                "id": itemId
-            };
-            $scope.userVotes--;
+            // Decrement number of votes left
+            $scope.feedback.votes--;
+
             syncVotes();
 
-        // If selected, set 'selected' to false
+        // If selected, remove from list of selected items
         } else if (itemIsSelected) {
-            $scope.feedbackVotes[itemIndex].selected = false;
-            $scope.userVotes++;
+
+            // Remove item from voteItems list
+            $scope.feedback.voteItems = _.without($scope.feedback.voteItems, itemId);
+
+            // Add a vote back
+            $scope.feedback.votes++;
+
             syncVotes();
 
         // No votes left
@@ -304,25 +240,12 @@ angular.module('schedu.controllers', [])
      */
     var syncVotes = function () {
 
-        userData.feedback.voteItems = [];
+        LoadingFactory.show();
 
-        // Create array of only selected items
-        _.each($scope.feedbackVotes, function (feedbackItem) {
-            if (feedbackItem.selected === true) {
-                userData.feedback.voteItems.push(feedbackItem);
-            }
-        });
-
-        // Update and push data
-        userData.feedback.votes = $scope.userVotes;
-        UserDB.updateUser(userData).then(function () {
-            UserDB.getUser(userData.phoneNumber).then(function (newUserData) {
-                userData = newUserData;
-
-                // Store user data in local storage
-                var localData = JSON.stringify(userData);
-                window.localStorage.setItem('SchedUser', localData);
-            });
+        localUser.feedback = $scope.feedback;
+        DataService.syncUser(localUser).then(function (response) {
+            localUser = response.data;
+            LoadingFactory.hide();
         });
     };
 });

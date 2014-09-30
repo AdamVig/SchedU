@@ -1,386 +1,438 @@
 angular.module('schedu.services', [])
 
-////////////////////////
-// ScheduleDB Service //
-////////////////////////
-.service('FeedbackDB', function ($q) {
+.service('DataService', function($q, dbUrl, FeedbackItemsFactory, StorageService) {
 
-  this.getList = function () {
-    var db = new PouchDB('https://schedu.couchappy.com:6984/feedback');
-    var dbBackup = new PouchDB('https://schedu.cloudant.com:6984/feedback');
-    var deferred = $q.defer();
+  // Create database objects
+  var userDb = new PouchDB(dbUrl + "user");
+  var scheduleDb = new PouchDB(dbUrl + "schedule");
+  var feedbackDb = new PouchDB(dbUrl + "feedback");
 
-    db.allDocs({include_docs: true}, function (error, response) {
-      deferred.resolve({"err": error, "response": response.rows});
-    });
-
-    return deferred.promise;
-  };
-
-})
-
-//////////////////////
-// Register Service //
-//////////////////////
-.service('RegisterService', function () {
+  /////////////////////////////////////////
+  // PUBLIC DATABASE RETRIEVAL FUNCTIONS //
+  /////////////////////////////////////////
 
   /**
-   * Returns which days each class is on from form data
-   * @param  {array} formDays ex: ['primary', 'other', ... ]
-   * @return {object}            Contains arrays ex: [1,3,5,7] for primary and other classes
+   * Retrieve schedule for date from database
+   * @param  {string} date      Date to get schedule for, format: MM-DD-YY
+   * @return {schedule object}  Schedule object containing periodOrder (array),
+   *                            dayNumber (int, 1-8) and special (string or false)
    */
-  this.classDays = function (formDays) {
+  this.getSchedule = function (date) {
 
-    var primaryDays = [];
-    var otherDays = [];
+    // Setup promise
+    var request = $q.defer();
 
-    _.each(formDays, function (element, index) {
+    scheduleDb.get(date, function (error, data) {
 
-      if (element == "primary") {
-        primaryDays.push(parseInt(index, 10)); // Add day number
-      } else {
-        otherDays.push(parseInt(index, 10)); // Add day number
+      if (error == null) {
+        error = false;
       }
 
+      // Resolve promise
+      request.resolve({"data": data, "error": error});
     });
 
-    return {
-      "primary": primaryDays,
-      "other": otherDays
-    };
-
-  };
-
-})
-
-
-////////////////////
-// UserDB Service //
-////////////////////
-.service('UserDB', function ($q) {
-  
-  this.testUser = {
-    "firstName": "John",
-    "lastName": "Smith",
-    "phoneNumber": "555-555-5555",
-    "grade": "12",
-    "a": {
-      "name": "Gym",
-      "teacher": "Mrs. McNamara",
-      "room": "Upper Gym",
-      "days": [1,3,5,7],
-      "alternate": {
-        "name": "Health",
-        "teacher": "Mr. Ettinger",
-        "room": "Health",
-        "days": [2,4,6,8]
-      }
-    },
-    "b": {
-      "name": "English",
-      "teacher": "Mrs. Earley",
-      "room": "111"
-    },
-    "c": {
-      "name": "Calculus",
-      "teacher": "Mr. Kempskie",
-      "room": "102"
-    },
-    "d": {
-      "name": "Study",
-      "room": "Media Center",
-      "days": [1,2,3,4,6,8],
-      "alternate": {
-        "name": "Guidance Seminar",
-        "teacher": "Mr. Glover",
-        "room": "Fishbowl",
-        "days": [5,7]
-      }
-    },
-    "e": {
-      "name": "History",
-      "teacher": "Mr. Sakellarion"
-    },
-    "f": {
-      "name": "Programming",
-      "teacher": "Mrs. Clark",
-      "room": "403a"
-    },
-    "g": {
-      "name": "Spanish",
-      "teacher": "Señora Holman",
-      "room": "168"
-    }
-  };
-
-
-  /**
-   * Add new user to user database using phone number as _id
-   * @param {object} user Contains phone number, name, and all class data
-   */
-  this.addUser = function (userData) {
-    var db = new PouchDB('https://schedu.iriscouch.com:6984/user');
-    var deferred = $q.defer();
-
-    db.put(userData, userData.phoneNumber, function (error, response) {
-      deferred.resolve({"err":error, "response": response});
-    });
-
-    return deferred.promise;
+    return request.promise;
   };
 
   /**
-   * Queries database to see if user exists
-   * @param  {object} response Either contains user or error object
-   * @return {boolean}         True if exists, false otherwise
-   */
-  this.userExists = function (response) {
-    if (response.error == "not_found")
-      return false;
-    else
-      return true;
-  };
-
-  /**
-   * Retrieve user from database by phone number
-   * @param  {string} phoneNumber User's unique phone number
-   * @return {User}               Contains phone number, name, and all class data
+   * Retrieve user from database
+   * @param  {string} phoneNumber User's phone number with dashes,
+   *                                      ex: 555-555-5555
+   * @return {user object}        User object containing first name, last name,
+   *                                     phone number, classes, phone number
    */
   this.getUser = function (phoneNumber) {
-    var db = new PouchDB('https://schedu.iriscouch.com:6984/user');
-    var deferred = $q.defer();
 
-    db.get(phoneNumber, function (error, userData) {
-      deferred.resolve(userData);
+    // Setup promise
+    var request = $q.defer();
+
+    userDb.get(phoneNumber, function (error, data) {
+
+      if (error == null) {
+        error = false;
+      }
+
+      // Resolve promise
+      request.resolve({"data": data, "error": error});
     });
 
-    return deferred.promise;
+    return request.promise;
+  };
+
+  /**
+   * Retrieve list of feedback items from database
+   * @return {feedback object} @TODO check data type of feedback item
+   */
+  this.getFeedbackItems = function () {
+
+    // Setup promise
+    var request = $q.defer();
+
+    feedbackDb.allDocs({include_docs: true}, function (error, data) {
+
+      if (error == null) {
+        error = false;
+      }
+
+      data = FeedbackItemsFactory.make(data.rows);
+
+      // Resolve promise
+      request.resolve({"data": data, "error": error});
+    });
+
+    return request.promise;
+  };
+
+  ////////////////////////////////////////
+  // PUBLIC USER MODIFICATION FUNCTIONS //
+  ////////////////////////////////////////
+
+  /**
+   * Sync user to database
+   * @param  {user object} userData User object containing first name, last name,
+   *                                phone number, classes, phone number, AND revision
+   * @return {response object}      Response object containing error (string or false)
+   *                                and response (string or false)
+   */
+  this.syncUser = function (userData) {
+
+    // Setup promise
+    var request = $q.defer();
+
+    // Write user data to database
+    userDb.put(userData, userData.phoneNumber, userData._rev, function () {
+
+      userDb.get(userData.phoneNumber, function (error, data) {
+
+        if (error == null) {
+          error = false;
+        }
+
+        StorageService.storeUser(data);
+
+        // Resolve promise
+        request.resolve({"data": data, "error": error});
+
+      });
+    });
+
+    return request.promise;
 
   };
 
   /**
-   * Update user data in database
-   * @param  {Object} userData Contains phone number, name, classes, etc.
-   * @return {String}             Server respone to PUT request
+   * Create user
+   * @param  {user object} userData User object containing first name, last name,
+   *                                phone number, classes, phone number
+   * @return {response object}      Response object containing error (string or false)
+   *                                and response (string or false)
    */
-  this.updateUser = function (userData) {
-    var db = new PouchDB('https://schedu.iriscouch.com:6984/user');
-    var deferred = $q.defer();
+  this.createUser = function (userData) {
 
-    db.put(userData, userData._id, userData._rev, function (error, response) {
-      deferred.resolve({"err":error, "response": response});
+    // Capitalize first name, last name, and class names
+    // @TODO: make registration form take care of this
+    userData.firstName = userData.firstName.charAt(0).toUpperCase() + userData.firstName.slice(1);
+    userData.lastName = userData.lastName.charAt(0).toUpperCase() + userData.lastName.slice(1);
+    _.each(['a','b','c','d','e','f','g'], function (period) {
+        userData[period].name = userData[period].name.charAt(0).toUpperCase() + userData[period].name.slice(1);
+        if (userData[period].alternate) {
+          userData[period].alternate.name = userData[period].alternate.name.charAt(0).toUpperCase() + userData[period].alternate.name.slice(1);
+        }
     });
 
-    return deferred.promise;
+    // Add user feedback votes object
+    userData["feedback"] = {
+      "votes": 3,
+      "voteItems": []
+    };
+
+    // Setup promise
+    var request = $q.defer();
+
+    // Write user data to database
+    userDb.put(userData, userData.phoneNumber, function (error, data) {
+      
+      if (error == null) {
+        error = false;
+      }
+
+      // Resolve promise
+      request.resolve({"data": data, "error": error});
+    });
+
+    return request.promise;
   };
 
 })
 
+.service('StorageService', function() {
 
-////////////////////////
-// ClassOrder Service //
-////////////////////////
-.service('ClassOrder', function ($q) {
-
-  this.testSchedule = {
-   "_id": "08/27/14",
-   "_rev": "2-fdf8fa68e3a8b97229b1b200699247e2",
-   "dayNumber": 1,
-   "special": false,
-   "periodOrder": [
-     "a",
-     "Activity Period",
-     "b",
-     "c",
-     "d",
-     "e",
-     "f",
-     "g"
-   ]
+  /**
+   * Store user data object in local storage
+   * @param  {user object} userData User object containing first name, last name,
+   *                                phone number, classes, phone number
+   */
+  this.storeUser = function (userData) {
+    var userData = JSON.stringify(userData);
+    window.localStorage.setItem('SchedUser', userData);
   };
 
   /**
-   * Returns the day schedule for today in string format
-   * @return {String} ex: A1
+   * Retrieve user data from local storage
+   * @return {user object or boolean} User object containing first name, last name,
+   *                                  phone number, classes, phone number
+   *                                  OR false if not found
    */
-  this.getDaySchedule = function () {
-    var db = new PouchDB('https://schedu.iriscouch.com:6984/schedule');
-    var deferred = $q.defer();
-    
-    var today = moment();
+  this.getUser = function () {
 
-    // If weekend, change date to nearest Monday
-    if (today.isoWeekday() == 6) {
-      today.add(2, 'days');
-    } else if (today.isoWeekday() == 7) {
-      today.add(1, 'days');
+    var storedData = localStorage.getItem('SchedUser');
+    if (storedData == "undefined") {
+      user = false;
+    } else {
+      user = JSON.parse(storedData);
     }
 
-    db.get(today.format("MM-DD-YY"), function (error, schedule) {
+    return user;
+  };
 
-      var daySchedule;
-      if (schedule.periodOrder) {
-        daySchedule = " - Day " + schedule.periodOrder[0].toUpperCase() + schedule.dayNumber;
-      } else {
-        daySchedule = false;
+})
+
+.factory('ClassDaysFactory', function() {
+
+  return {
+
+    /**
+     * Decides which days a class is on given a list of "primary" and "alternate"
+     * @TODO remove the need for this factory by rewriting registration form
+     * @param  {object} formData  All data from registration form
+     * @return {object}          All data from registration form, days fixed
+     */
+    make: function (formData) {
+
+      var dayLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+
+      // For each period
+      _.each(dayLetters, function (dayLetter, index, list) {
+
+        var currentClass = formData[dayLetter];
+
+        // If current class meets on specific days
+        if (currentClass.days) {
+
+          var primaryDays = [];
+          var alternateDays = [];
+
+          // For each day
+          _.each(currentClass.days, function (element, index) {
+
+            if (element == "primary") {
+              primaryDays.push(parseInt(index, 10)); // Add day number
+            } else {
+              alternateDays.push(parseInt(index, 10)); // Add day number
+            }
+
+          });
+
+          currentClass.days = primaryDays;
+          currentClass.alternate.days = alternateDays;
+        }
+
+        formData[dayLetter] = currentClass;
+      });
+
+      return formData;
+    }
+  }
+})
+
+.factory('ClassOrderFactory', function () {
+  return {
+    
+    /**
+     * Parses schedule object into A1 notation using the first period from 
+     * periodOrder and the day number. False if first period is more than one
+     * letter long or if period order doesn't exist.
+     * @param  {object} scheduleObject Schedule object containing periodOrder,
+     *                                 dayNumber, special (and holiday if applicable)
+     * @return {string or boolean}     Schedule as string in A1 notation or false if
+     *                                 schedule object doesn't have a period order
+     */
+    parseSchedule: function (scheduleObject) {
+
+      var scheduleString = false;
+
+      // Period order exists in schedule object
+      if (scheduleObject.periodOrder) {
+
+        var dayLetter = scheduleObject.periodOrder[0].toUpperCase()
+
+        // Is a single letter
+        if (dayLetter.length == 1) {
+          scheduleString = dayLetter + scheduleObject.dayNumber;
+        }
       }
+      return scheduleString;
+    },
+
+    /**
+     * Generate class order from user data and schedule object
+     * @param  {user object} userData  User object containing first name, last name,
+     *                                   phone number, classes, phone number
+     * @param  {object} scheduleObject Schedule object containing periodOrder,
+     *                                 dayNumber, special (and holiday if applicable)
+     * @return {array}                 List of class objects, each containing name
+     *                                 and letter (unless holiday)
+     */
+    make: function (userData, scheduleObject) {
+
+      var classOrder = [];
+
+      // If holiday
+      if (scheduleObject.special == "holiday") {
+
+        classOrder.push({"name": scheduleObject.holiday});
+
+      } else {
+
+        // Each period in the day's schedule
+        _.each(scheduleObject.periodOrder, function (currentPeriod, index) {
+
+          // Period is a letter, ex: "a"
+          if (currentPeriod.length == 1) {
+
+            var currentClass = userData[currentPeriod];
+
+            // Class alternates with another class
+            if (currentClass && currentClass.alternate) {
+
+              // Current class occurs today
+              if (_.contains(currentClass.days, scheduleObject.dayNumber)) {
+
+                // Slim object down to only required attributes
+                currentClass = {
+                  "name": currentClass.name, 
+                  "teacher": currentClass.teacher, 
+                  "room": currentClass.room
+                };
+
+              // Alternate class occurs today
+              } else if (_.contains(currentClass.alternate.days, scheduleObject.dayNumber)) {
+
+                currentClass = currentClass.alternate;
+
+              // Neither class occurs today; default to study
+              } else {
+
+                // Default to study
+                currentClass = {
+                  "name": "Study"
+                };
+              }
+
+            }
+
+            currentClass.letter = currentPeriod.toUpperCase();
+            classOrder.push(currentClass);
+
+          // Special period, ex: "Activity Period"
+          } else {
+
+            var specialPeriod = {
+              "name": currentPeriod // Name of special period instead of letter
+            }
+
+            specialPeriod.letter = "Sp";
+            classOrder.push(specialPeriod);
+          }
+        });
+      } // End if holiday
       
-      var date = new moment(schedule._id, "MM-DD-YY");
+      return classOrder;
+    }
+  }
+})
+
+/**
+ * Creates object out of feedbackItems where the index of each item
+ * is its _id string from the database; makes searching in the
+ * controller simpler
+ * @param  {array} feedbackItemsDatabase Array of meta-doc objects containing doc, _id, and key;
+ *                                       each doc is a feedback item object containing _id, _rev,
+ *                                       name, and votes
+ * @return {object}                      Object with keys being the _id of each feedback item;
+ *                                       each feedback item object contains _id, name, and votes
+ */
+.factory('FeedbackItemsFactory', function () {
+  
+  return {
+    make: function (feedbackItemsDatabase) {
+      var feedbackItems = {};
+
+      _.each(feedbackItemsDatabase, function (metaDoc) {
+        feedbackItems[metaDoc.id] = {
+          "_id": metaDoc.id,
+          "name": metaDoc.doc.name,
+          "votes": metaDoc.doc.votes
+        };
+      });
+
+      return feedbackItems;
+    }
+  }
+})
+
+.factory('DateFactory', function () {
+  return {
+
+    /**
+     * Gets today's date if not weekend, next 
+     * Monday's date if weekend
+     * @return {moment object} Moment() of the current day's date
+     */
+    currentDay: function () {
+
+      currentDay = moment();
+
+      // If weekend, change date to next Monday
+      if (currentDay.isoWeekday() > 5) {
+        currentDay.add(currentDay.isoWeekday()-5, 'days');
+      }
+
+      return currentDay;
+    },
+
+    /**
+     * Format date into weekday and full date format,
+     * ex: todaysDate = September 27; dayOfWeek = Wednesday
+     * @param  {string} date Date in format MM-DD-YY
+     * @return {object}      Object containing todaysDate and 
+     *                       dayOfWeek as strings
+     */
+    formatDate: function (date) {
       var todaysDate = date.format("MMMM D");
       var dayOfWeek = date.format("dddd");
 
-      deferred.resolve({
-        "daySchedule": daySchedule,
+      return {
         "todaysDate": todaysDate,
         "dayOfWeek": dayOfWeek
-      });
-    });
-
-    return deferred.promise;
-  
-  }
-
-  /**
-   * Returns the schedule for today
-   * @return {Object} ex: {"periodOrder":["a","b"..."g"], dayNumber": 1}
-   */
-  function getSchedule () {
-    var db = new PouchDB('https://schedu.iriscouch.com:6984/schedule');
-    var deferred = $q.defer();
-    
-    var today = moment();
-
-    // If weekend, change date to nearest Monday
-    if (today.isoWeekday() == 6) {
-      today.add(2, 'days');
-    } else if (today.isoWeekday() == 7) {
-      today.add(1, 'days');
+      };
     }
-
-    db.get(today.format("MM-DD-YY"), function (error, schedule) {
-      deferred.resolve(schedule);
-    });
-
-    return deferred.promise;
-  
   }
+})
 
-  function getTimes () {
-    var db = new PouchDB('https://schedu.iriscouch.com:6984/info');
-    var deferred = $q.defer();
-
-    // Retrieve object containing all possible bell schedules
-    db.get("bell-schedule", function (error, bellSchedules) {
-      deferred.resolve(bellSchedules);
-    });
-
-    return deferred.promise;
-  }
-  
-  /**
-   * Create class order for given user and schedule
-   * @param  {object} user     Contains phone number, name, and all class data
-   * @param  {object} schedule Contains date, periodOrder ex: [a,b,c,d,e,f,g], dayNumber ex: 1, special ex: false
-   * @return {object}          Contains classOrder, ex: [{"name": "Programming", "teacher": "Mrs. Clark", "room": "403B"}]
-   */
-  function createClassOrder (user, schedule, bellSchedules) {
-    
-    var classOrder = [];
-
-    // If holiday
-    if (schedule.special == "holiday") {
-      classOrder = [{
-        "name":schedule.holiday
-      }];
-    } else {
-
-      var bellSchedule;
-      if (schedule.special === false) { // Normal day
-
-        bellSchedule = bellSchedules.standard;
-      } else if (schedule.special == "activity-period") { // Activity period
-
-        bellSchedule = bellSchedules.activityPeriod;
-      } else if (schedule.special == "early-release") {
-
-        bellSchedule = bellSchedules.earlyRelease;
-      }
-
-      // Each period in the day's schedule
-      _.each(schedule.periodOrder, function (currentPeriod, index) {
-
-        // Period is a letter, ex: "a"
-        if (currentPeriod.length == 1) {
-
-          var currentClass = user[currentPeriod];
-
-          // Class alternates with another class
-          if (currentClass && currentClass.alternate) {
-
-            // Current class occurs today
-            if (_.contains(currentClass.days, schedule.dayNumber)) {
-
-              // Slim object down to only required attributes
-              currentClass = {
-                "name": currentClass.name, 
-                "teacher": currentClass.teacher, 
-                "room": currentClass.room
-              };
-
-            // Alternate class occurs today
-            } else if (_.contains(currentClass.alternate.days, schedule.dayNumber)) {
-
-              currentClass = currentClass.alternate;
-
-            // Neither class occurs today; default to study
-            } else {
-
-              // Default to study
-              currentClass = {
-                "name": "Study",
-                "teacher": null,
-                "room": null
-              };
-            }
-
-          }
-
-          currentClass.letter = currentPeriod.toUpperCase();
-          classOrder.push(currentClass);
-
-        // Special period, ex: "Activity Period"
-        } else {
-
-          var specialPeriod = {
-            "name": currentPeriod // Name of special period instead of letter
-          }
-
-          specialPeriod.letter = "Sp";
-          classOrder.push(specialPeriod);
-        }
+.factory('LoadingFactory', function ($ionicLoading) {
+  return {
+    show: function () {
+      $ionicLoading.show({
+        templateUrl: '/templates/loader.html',
+        noBackdrop: true
       });
-    } // End if holiday
-    
-    return classOrder;
+    },
+    hide: function () {
+      setTimeout(function(){
+          $ionicLoading.hide();
+      }, 500);
+    }
   }
-
-  this.make = function (user, callback) {
-
-    var schedule;
-    var deferred = $q.defer();
-
-    getSchedule()
-      .then(function (returnSchedule) {
-        schedule = returnSchedule;
-      })
-      .then(getTimes)
-      .then(function (bellSchedules) {
-        var classOrder = createClassOrder(user, schedule, bellSchedules);
-        deferred.resolve(classOrder);
-        callback(classOrder);
-      });
-
-    return deferred.promise;
-  }
-
 });

@@ -1,15 +1,11 @@
 <ion-view>
-  <ion-content>
-    <div class="center-container">
-      <a class="center-content" href>
-        <img class="logo" src="img/logo.svg" alt="SchedU Logo">
-      </a>
-    </div>
-    <a class="reverse" href="#/schedule">
-      <button class="back-button button-clear">
-        <i class="ion-arrow-left-c"></i> Schedule
-      </button>
+  <ion-header-bar>
+    <a class="back-link reverse button button-clear" href="#/schedule">
+      <i class="ion-arrow-left-c"></i> Schedule
     </a>
+    <img class="logo" src="img/logo.svg" alt="SchedU Logo">
+  </ion-header-bar>
+  <ion-content>
     <ion-list>
       <div class="list-page-heading item text-center">
         <div ng-show="feedback.votes>0">

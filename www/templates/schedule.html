@@ -1,16 +1,12 @@
 
 <ion-view>
-  <ion-content>
-    <div class="center-container">
-      <a class="center-content" href="#">
-        <img class="logo" src="img/logo.svg" alt="SchedU Logo">
-      </a>
-    </div>
-    <a class="reverse" href="#/login">
-      <button class="back-button button-clear">
-        <i class="ion-arrow-left-c"></i> Sign out
-      </button>
+  <ion-header-bar>
+    <a class="back-link reverse button button-clear" href="#/login">
+      <i class="ion-arrow-left-c"></i> Sign out
     </a>
+    <img class="logo" src="img/logo.svg" alt="SchedU Logo">
+  </ion-header-bar>
+  <ion-content has-header="true" overflow-scroll="true">
     <ion-list class="class-list">
       <div class="list-page-heading item text-center date-header" ng-click="dateShow = !dateShow">
         <h3 ng-show="dateShow">{{formattedDate.todaysDate}}</h3>

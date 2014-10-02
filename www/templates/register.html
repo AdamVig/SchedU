@@ -1,15 +1,11 @@
 <ion-view title="Register">
-  <ion-content>
-    <div class="center-container">
-      <a class="center-content" href="#">
-        <img class="logo" src="img/logo.svg" alt="SchedU Logo">
-      </a>
-    </div>
-    <a href="#/login">
-      <button class="back-button button-clear">
-        <i class="ion-arrow-left-c"></i> Login
-      </button>
+  <ion-header-bar>
+    <a class="back-link reverse button button-clear" href="#/login">
+      <i class="ion-arrow-left-c"></i> Login
     </a>
+    <img class="logo" src="img/logo.svg" alt="SchedU Logo">
+  </ion-header-bar>
+  <ion-content>
     <form name="registerForm" ng-submit="register(formData)" novalidate>
       <div class="list">
         <label class="item item-input">

@@ -29,9 +29,6 @@
         "com.ionic.keyboard": {
             "PACKAGE_NAME": "com.getschedu.schedu"
         },
-        "org.apache.cordova.console": {
-            "PACKAGE_NAME": "com.getschedu.schedu"
-        },
         "org.apache.cordova.device": {
             "PACKAGE_NAME": "com.getschedu.schedu"
         },

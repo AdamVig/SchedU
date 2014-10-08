@@ -1,13 +1,31 @@
 /Users/adam/code/SchedU/platforms/android/ant-build/SchedU.ap_ \
- : /Users/adam/code/SchedU/platforms/android/res/drawable-hdpi/icon.png \
+ : /Users/adam/code/SchedU/platforms/android/res/drawable/icon.png \
+/Users/adam/code/SchedU/platforms/android/res/drawable-hdpi/icon.png \
+/Users/adam/code/SchedU/platforms/android/res/drawable-land-hdpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/res/drawable-land-ldpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/res/drawable-land-mdpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/res/drawable-land-xhdpi/screen.png \
 /Users/adam/code/SchedU/platforms/android/res/drawable-ldpi/icon.png \
 /Users/adam/code/SchedU/platforms/android/res/drawable-mdpi/icon.png \
+/Users/adam/code/SchedU/platforms/android/res/drawable-port-hdpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/res/drawable-port-ldpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/res/drawable-port-mdpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/res/drawable-port-xhdpi/screen.png \
 /Users/adam/code/SchedU/platforms/android/res/drawable-xhdpi/icon.png \
 /Users/adam/code/SchedU/platforms/android/res/values/strings.xml \
 /Users/adam/code/SchedU/platforms/android/res/xml/config.xml \
+/Users/adam/code/SchedU/platforms/android/ant-build/res/drawable/icon.png \
 /Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-hdpi/icon.png \
+/Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-land-hdpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-land-ldpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-land-mdpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-land-xhdpi/screen.png \
 /Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-ldpi/icon.png \
 /Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-mdpi/icon.png \
+/Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-port-hdpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-port-ldpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-port-mdpi/screen.png \
+/Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-port-xhdpi/screen.png \
 /Users/adam/code/SchedU/platforms/android/ant-build/res/drawable-xhdpi/icon.png \
 /Users/adam/code/SchedU/platforms/android/assets/_where-is-www.txt \
 /Users/adam/code/SchedU/platforms/android/assets/www \
@@ -144,10 +162,13 @@
 /Users/adam/code/SchedU/platforms/android/assets/www/lib/js/angular-ui/angular-ui-router.min.js \
 /Users/adam/code/SchedU/platforms/android/assets/www/plugins/com.ionic.keyboard \
 /Users/adam/code/SchedU/platforms/android/assets/www/plugins/org.apache.cordova.device \
+/Users/adam/code/SchedU/platforms/android/assets/www/plugins/org.apache.cordova.statusbar \
 /Users/adam/code/SchedU/platforms/android/assets/www/plugins/com.ionic.keyboard/www \
 /Users/adam/code/SchedU/platforms/android/assets/www/plugins/com.ionic.keyboard/www/keyboard.js \
 /Users/adam/code/SchedU/platforms/android/assets/www/plugins/org.apache.cordova.device/www \
 /Users/adam/code/SchedU/platforms/android/assets/www/plugins/org.apache.cordova.device/www/device.js \
+/Users/adam/code/SchedU/platforms/android/assets/www/plugins/org.apache.cordova.statusbar/www \
+/Users/adam/code/SchedU/platforms/android/assets/www/plugins/org.apache.cordova.statusbar/www/statusbar.js \
 /Users/adam/code/SchedU/platforms/android/assets/www/res/icon \
 /Users/adam/code/SchedU/platforms/android/assets/www/res/screen \
 /Users/adam/code/SchedU/platforms/android/assets/www/res/icon/android \

@@ -14,18 +14,6 @@ angular.module('schedu.controllers', [])
     LoadingFactory.hide();
   };
   
-  // From FlatUI Colors
-  $scope.dayLetterColors = {
-    "A": {"background-color": "#D362E8"},
-    "B": {"background-color": "#2ecc71"},
-    "C": {"background-color": "#e67e22"},
-    "D": {"background-color": "#9b59b6"},
-    "E": {"background-color": "#e74c3c"},
-    "F": {"background-color": "#f1c40f"},
-    "G": {"background-color": "#3498db"},
-    "Sp": {"background-color": "#34495e"}
-  };
-  
   // Get user data object or "undefined"
   var localUser = StorageService.getUser();
 

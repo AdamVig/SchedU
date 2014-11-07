@@ -1,36 +1,50 @@
 <ion-view title="Register">
   <ion-header-bar>
-    <a class="back-link reverse button button-clear" href="#/login">
-      <i class="ion-arrow-left-c"></i> Login
-    </a>
-    <img class="logo" src="img/logo.svg" alt="SchedU Logo">
+    <div class="buttons">
+      <a href="#/login" class="reverse">
+        <button class="button button-clear back-arrow">
+          <i class="ion-arrow-left-c"></i>
+        </button>
+      </a>
+    </div>
+    <h1 class="title">
+      <img class="title-image"
+           src="img/logo.svg"
+           height="60"
+           alt="SchedU Logo">
+    </h1>
   </ion-header-bar>
-  <ion-content>
-    <form name="registerForm" ng-submit="register(formData)" novalidate>
+  <ion-content has-header="true">
+    <form name="registerForm" ng-submit="register(formData)" novalidate ng-controller="RegisterCtrl">
       <div class="list">
         <label class="item item-input">
-          <span class="input-label">First Name</span>
+          <span class="input-label">First Name:</span>
             <input type="text" required ng-maxlength="15" ng-pattern="/[a-zA-Z'-.]/" ng-model="formData.firstName" name="firstName">
         </label>
         <small class="error item" ng-show="registerForm.firstName.$invalid && registerForm.firstName.$dirty">
           Doesn't look like a first name. Try removing numbers/punctuation and making it shorter.
         </small>
         <label class="item item-input">
-          <span class="input-label">Last Name</span>
+          <span class="input-label">Last Name:</span>
           <input type="text" required ng-maxlength="15" ng-pattern="/[a-zA-Z'-.]/" ng-model="formData.lastName" name="lastName">
         </label>
         <small class="error item" ng-show="registerForm.lastName.$invalid && registerForm.lastName.$dirty">
           Doesn't look like a last name. Try removing numbers/punctuation and making it shorter.
         </small>
         <label class="item item-input">
-          <span class="input-label">Phone Number</span>
-          <input type="tel" ng-minlength="12" ng-maxlength="12" required ng-pattern="/[1-9-]/" ng-model="formData.phoneNumber" ng-model-options="{ updateOn: 'blur' }" name="phoneNumber">
+          <span class="input-label"
+                ng-class="{'label-invalid': registerForm.phoneNumber.$invalid && registerForm.phoneNumber.$dirty}">
+            Phone Number:
+          </span>
+          <input type="tel"
+                 name="phoneNumber"
+                 placeholder="555-555-5555"
+                 required
+                 ng-model="formData.phoneNumber"
+                 ng-change="processPhoneNumber(formData.phoneNumber)">
         </label>
-        <small class="error item" ng-show="registerForm.phoneNumber.$invalid && registerForm.phoneNumber.$dirty">
-          Doesn't look like a phone number. Try again! <span class="tel-example">Like this: 555-555-5555.</span>
-        </small>
         <label class="item item-input item-select">
-          <div class="input-label">Grade</div>
+          <div class="input-label">Grade:</div>
           <select ng-model="formData.grade">
             <option value="9">9 - Freshman</option>
             <option value="10">10 - Sophomore</option>
@@ -43,10 +57,10 @@
       <!-- PERIOD SECTIONS CONTAINER -->
       <div class="list">
         <!-- INDIVIDUAL PERIOD SECTION -->
-        <div class="item item-divider">A Period</div>
+        <div class="item item-divider period-title a-period">A Period</div>
         <!-- PRIMARY CLASS NAME INPUT -->
         <label class="item item-input">
-          <span class="input-label">Class Name</span>
+          <span class="input-label">Class Name:</span>
           <input type="text" ng-maxlength="20" required ng-model="formData.a.name" name="aPrimary">
         </label>
         <small class="error item" ng-show="registerForm.aPrimary.$invalid && registerForm.aPrimary.$dirty">
@@ -65,88 +79,56 @@
         <div ng-show="aAlternatesClass">
           <!-- Alternate Class Name INPUT -->
           <label class="item item-input">
-            <span class="input-label">Alternate Class Name</span>
+            <span class="input-label">Alternate Class Name:</span>
             <input type="text" ng-model="formData.a.alternate.name">
           </label>
           <!-- PRIMARY CLASS DAY SELECTION -->
-          <div class="item days-selection">
-            Primary Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.a.days.1" name="formData.a.days[1]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.a.days.2" name="formData.a.days[2]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.a.days.3" name="formData.a.days[3]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.a.days.4" name="formData.a.days[4]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.a.days.5" name="formData.a.days[5]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.a.days.6" name="formData.a.days[6]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.a.days.7" name="formData.a.days[7]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.a.days.8" name="formData.a.days[8]" value="primary">
-            </label>
+          <div class="item">
+            Primary Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.a.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.a.days[{{n}}]"
+                       id="formData.a.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.a.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.a.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
           </div>
           <!-- OTHER CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Other Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.a.days.1" name="formData.a.days[1]" value="other">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.a.days.2" name="formData.a.days[2]" value="other">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.a.days.3" name="formData.a.days[3]" value="other">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.a.days.4" name="formData.a.days[4]" value="other">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.a.days.5" name="formData.a.days[5]" value="other">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.a.days.6" name="formData.a.days[6]" value="other">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.a.days.7" name="formData.a.days[7]" value="other">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.a.days.8" name="formData.a.days[8]" value="other">
-            </label>
-          </div> <!-- End Other Class Day Selection -->
+            Alternate Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.a.alternate.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.a.days[{{n}}]"
+                       id="formData.a.alternate.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.a.alternate.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.a.alternate.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
+          </div> <!-- End Alternate Class Day Selection -->
         </div> <!-- End Alternate Class -->
 
         <!-- INDIVIDUAL PERIOD SECTION -->
-        <div class="item item-divider">B Period</div>
+        <div class="item item-divider period-title b-period">B Period</div>
         <!-- PRIMARY CLASS NAME INPUT -->
         <label class="item item-input">
-          <span class="input-label">Class Name</span>
+          <span class="input-label">Class Name:</span>
           <input type="text" ng-maxlength="20" required ng-model="formData.b.name" name="bPrimary">
         </label>
         <small class="error item" ng-show="registerForm.bPrimary.$invalid && registerForm.bPrimary.$dirty">
@@ -165,88 +147,56 @@
         <div ng-show="bAlternatesClass">
           <!-- Alternate Class Name INPUT -->
           <label class="item item-input">
-            <span class="input-label">Alternate Class Name</span>
+            <span class="input-label">Alternate Class Name:</span>
             <input type="text" ng-model="formData.b.alternate.name">
           </label>
           <!-- PRIMARY CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Primary Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.b.days.1" name="formData.b.days[1]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.b.days.2" name="formData.b.days[2]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.b.days.3" name="formData.b.days[3]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.b.days.4" name="formData.b.days[4]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.b.days.5" name="formData.b.days[5]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.b.days.6" name="formData.b.days[6]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.b.days.7" name="formData.b.days[7]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.b.days.8" name="formData.b.days[8]" value="primary">
-            </label>
+            Primary Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.b.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.b.days[{{n}}]"
+                       id="formData.b.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.b.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.b.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
           </div>
           <!-- OTHER CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Other Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.b.days.1" name="formData.b.days[1]" value="other">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.b.days.2" name="formData.b.days[2]" value="other">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.b.days.3" name="formData.b.days[3]" value="other">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.b.days.4" name="formData.b.days[4]" value="other">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.b.days.5" name="formData.b.days[5]" value="other">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.b.days.6" name="formData.b.days[6]" value="other">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.b.days.7" name="formData.b.days[7]" value="other">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.b.days.8" name="formData.b.days[8]" value="other">
-            </label>
-          </div> <!-- End Other Class Day Selection -->
+            Alternate Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.b.alternate.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.b.days[{{n}}]"
+                       id="formData.b.alternate.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.b.alternate.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.b.alternate.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
+          </div> <!-- End Alternate Class Day Selection -->
         </div> <!-- End Alternate Class -->
 
         <!-- INDIVIDUAL PERIOD SECTION -->
-        <div class="item item-divider">C Period</div>
+        <div class="item item-divider period-title c-period">C Period</div>
         <!-- PRIMARY CLASS NAME INPUT -->
         <label class="item item-input">
-          <span class="input-label">Class Name</span>
+          <span class="input-label">Class Name:</span>
           <input type="text" ng-maxlength="20" required ng-model="formData.c.name" name="cPrimary">
         </label>
         <small class="error item" ng-show="registerForm.cPrimary.$invalid && registerForm.cPrimary.$dirty">
@@ -265,88 +215,56 @@
         <div ng-show="cAlternatesClass">
           <!-- Alternate Class Name INPUT -->
           <label class="item item-input">
-            <span class="input-label">Alternate Class Name</span>
+            <span class="input-label">Alternate Class Name:</span>
             <input type="text" ng-model="formData.c.alternate.name">
           </label>
           <!-- PRIMARY CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Primary Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.c.days.1" name="formData.c.days[1]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.c.days.2" name="formData.c.days[2]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.c.days.3" name="formData.c.days[3]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.c.days.4" name="formData.c.days[4]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.c.days.5" name="formData.c.days[5]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.c.days.6" name="formData.c.days[6]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.c.days.7" name="formData.c.days[7]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.c.days.8" name="formData.c.days[8]" value="primary">
-            </label>
+            Primary Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.c.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.c.days[{{n}}]"
+                       id="formData.c.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.c.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.c.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
           </div>
           <!-- OTHER CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Other Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.c.days.1" name="formData.c.days[1]" value="other">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.c.days.2" name="formData.c.days[2]" value="other">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.c.days.3" name="formData.c.days[3]" value="other">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.c.days.4" name="formData.c.days[4]" value="other">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.c.days.5" name="formData.c.days[5]" value="other">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.c.days.6" name="formData.c.days[6]" value="other">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.c.days.7" name="formData.c.days[7]" value="other">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.c.days.8" name="formData.c.days[8]" value="other">
-            </label>
-          </div> <!-- End Other Class Day Selection -->
+            Alternate Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.c.alternate.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.c.days[{{n}}]"
+                       id="formData.c.alternate.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.c.alternate.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.c.alternate.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
+          </div> <!-- End Alternate Class Day Selection -->
         </div> <!-- End Alternate Class -->
 
         <!-- INDIVIDUAL PERIOD SECTION -->
-        <div class="item item-divider">D Period</div>
+        <div class="item item-divider period-title d-period">D Period</div>
         <!-- PRIMARY CLASS NAME INPUT -->
         <label class="item item-input">
-          <span class="input-label">Class Name</span>
+          <span class="input-label">Class Name:</span>
           <input type="text" ng-maxlength="20" required ng-model="formData.d.name" name="dPrimary">
         </label>
         <small class="error item" ng-show="registerForm.dPrimary.$invalid && registerForm.dPrimary.$dirty">
@@ -365,88 +283,56 @@
         <div ng-show="dAlternatesClass">
           <!-- Alternate Class Name INPUT -->
           <label class="item item-input">
-            <span class="input-label">Alternate Class Name</span>
+            <span class="input-label">Alternate Class Name:</span>
             <input type="text" ng-model="formData.d.alternate.name">
           </label>
           <!-- PRIMARY CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Primary Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.d.days.1" name="formData.d.days[1]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.d.days.2" name="formData.d.days[2]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.d.days.3" name="formData.d.days[3]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.d.days.4" name="formData.d.days[4]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.d.days.5" name="formData.d.days[5]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.d.days.6" name="formData.d.days[6]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.d.days.7" name="formData.d.days[7]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.d.days.8" name="formData.d.days[8]" value="primary">
-            </label>
+            Primary Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.d.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.d.days[{{n}}]"
+                       id="formData.d.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.d.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.d.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
           </div>
           <!-- OTHER CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Other Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.d.days.1" name="formData.d.days[1]" value="other">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.d.days.2" name="formData.d.days[2]" value="other">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.d.days.3" name="formData.d.days[3]" value="other">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.d.days.4" name="formData.d.days[4]" value="other">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.d.days.5" name="formData.d.days[5]" value="other">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.d.days.6" name="formData.d.days[6]" value="other">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.d.days.7" name="formData.d.days[7]" value="other">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.d.days.8" name="formData.d.days[8]" value="other">
-            </label>
-          </div> <!-- End Other Class Day Selection -->
+            Alternate Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.d.alternate.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.d.days[{{n}}]"
+                       id="formData.d.alternate.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.d.alternate.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.d.alternate.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
+          </div> <!-- End Alternate Class Day Selection -->
         </div> <!-- End Alternate Class -->
 
         <!-- INDIVIDUAL PERIOD SECTION -->
-        <div class="item item-divider">E Period</div>
+        <div class="item item-divider period-title e-period">E Period</div>
         <!-- PRIMARY CLASS NAME INPUT -->
         <label class="item item-input">
-          <span class="input-label">Class Name</span>
+          <span class="input-label">Class Name:</span>
           <input type="text" ng-maxlength="20" required ng-model="formData.e.name" name="ePrimary">
         </label>
         <small class="error item" ng-show="registerForm.ePrimary.$invalid && registerForm.ePrimary.$dirty">
@@ -465,88 +351,56 @@
         <div ng-show="eAlternatesClass">
           <!-- Alternate Class Name INPUT -->
           <label class="item item-input">
-            <span class="input-label">Alternate Class Name</span>
+            <span class="input-label">Alternate Class Name:</span>
             <input type="text" ng-model="formData.e.alternate.name">
           </label>
           <!-- PRIMARY CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Primary Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.e.days.1" name="formData.e.days[1]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.e.days.2" name="formData.e.days[2]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.e.days.3" name="formData.e.days[3]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.e.days.4" name="formData.e.days[4]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.e.days.5" name="formData.e.days[5]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.e.days.6" name="formData.e.days[6]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.e.days.7" name="formData.e.days[7]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.e.days.8" name="formData.e.days[8]" value="primary">
-            </label>
+            Primary Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.e.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.e.days[{{n}}]"
+                       id="formData.e.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.e.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.e.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
           </div>
           <!-- OTHER CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Other Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.e.days.1" name="formData.e.days[1]" value="other">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.e.days.2" name="formData.e.days[2]" value="other">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.e.days.3" name="formData.e.days[3]" value="other">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.e.days.4" name="formData.e.days[4]" value="other">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.e.days.5" name="formData.e.days[5]" value="other">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.e.days.6" name="formData.e.days[6]" value="other">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.e.days.7" name="formData.e.days[7]" value="other">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.e.days.8" name="formData.e.days[8]" value="other">
-            </label>
-          </div> <!-- End Other Class Day Selection -->
+            Alternate Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.e.alternate.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.e.days[{{n}}]"
+                       id="formData.e.alternate.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.e.alternate.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.e.alternate.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
+          </div> <!-- End Alternate Class Day Selection -->
         </div> <!-- End Alternate Class -->
 
         <!-- INDIVIDUAL PERIOD SECTION -->
-        <div class="item item-divider">F Period</div>
+        <div class="item item-divider period-title f-period">F Period</div>
         <!-- PRIMARY CLASS NAME INPUT -->
         <label class="item item-input">
-          <span class="input-label">Class Name</span>
+          <span class="input-label">Class Name:</span>
           <input type="text" ng-maxlength="20" required ng-model="formData.f.name" name="fPrimary">
         </label>
         <small class="error item" ng-show="registerForm.fPrimary.$invalid && registerForm.fPrimary.$dirty">
@@ -565,88 +419,56 @@
         <div ng-show="fAlternatesClass">
           <!-- Alternate Class Name INPUT -->
           <label class="item item-input">
-            <span class="input-label">Alternate Class Name</span>
+            <span class="input-label">Alternate Class Name:</span>
             <input type="text" ng-model="formData.f.alternate.name">
           </label>
           <!-- PRIMARY CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Primary Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.f.days.1" name="formData.f.days[1]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.f.days.2" name="formData.f.days[2]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.f.days.3" name="formData.f.days[3]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.f.days.4" name="formData.f.days[4]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.f.days.5" name="formData.f.days[5]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.f.days.6" name="formData.f.days[6]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.f.days.7" name="formData.f.days[7]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.f.days.8" name="formData.f.days[8]" value="primary">
-            </label>
+            Primary Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.f.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.f.days[{{n}}]"
+                       id="formData.f.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.f.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.f.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
           </div>
           <!-- OTHER CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Other Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.f.days.1" name="formData.f.days[1]" value="other">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.f.days.2" name="formData.f.days[2]" value="other">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.f.days.3" name="formData.f.days[3]" value="other">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.f.days.4" name="formData.f.days[4]" value="other">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.f.days.5" name="formData.f.days[5]" value="other">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.f.days.6" name="formData.f.days[6]" value="other">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.f.days.7" name="formData.f.days[7]" value="other">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.f.days.8" name="formData.f.days[8]" value="other">
-            </label>
-          </div> <!-- End Other Class Day Selection -->
+            Alternate Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.f.alternate.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.f.days[{{n}}]"
+                       id="formData.f.alternate.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.f.alternate.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.f.alternate.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
+          </div> <!-- End Alternate Class Day Selection -->
         </div> <!-- End Alternate Class -->
 
         <!-- INDIVIDUAL PERIOD SECTION -->
-        <div class="item item-divider">G Period</div>
+        <div class="item item-divider period-title g-period">G Period</div>
         <!-- PRIMARY CLASS NAME INPUT -->
         <label class="item item-input">
-          <span class="input-label">Class Name</span>
+          <span class="input-label">Class Name:</span>
           <input type="text" ng-maxlength="20" required ng-model="formData.g.name" name="gPrimary">
         </label>
         <small class="error item" ng-show="registerForm.gPrimary.$invalid && registerForm.gPrimary.$dirty">
@@ -665,85 +487,59 @@
         <div ng-show="gAlternatesClass">
           <!-- Alternate Class Name INPUT -->
           <label class="item item-input">
-            <span class="input-label">Alternate Class Name</span>
+            <span class="input-label">Alternate Class Name:</span>
             <input type="text" ng-model="formData.g.alternate.name">
           </label>
           <!-- PRIMARY CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Primary Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.g.days.1" name="formData.g.days[1]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.g.days.2" name="formData.g.days[2]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.g.days.3" name="formData.g.days[3]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.g.days.4" name="formData.g.days[4]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.g.days.5" name="formData.g.days[5]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.g.days.6" name="formData.g.days[6]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.g.days.7" name="formData.g.days[7]" value="primary">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.g.days.8" name="formData.g.days[8]" value="primary">
-            </label>
+            Primary Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.g.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.g.days[{{n}}]"
+                       id="formData.g.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.g.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.g.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
           </div>
           <!-- OTHER CLASS DAY SELECTION -->
           <div class="item days-selection">
-            Other Class Days:<br>
-            <label class="day-selector-label">
-              1
-              <input class="day-selector" type="radio" ng-model="formData.g.days.1" name="formData.g.days[1]" value="other">
-            </label>
-            <label class="day-selector-label">
-              2
-              <input class="day-selector" type="radio" ng-model="formData.g.days.2" name="formData.g.days[2]" value="other">
-            </label>
-            <label class="day-selector-label">
-              3
-              <input class="day-selector" type="radio" ng-model="formData.g.days.3" name="formData.g.days[3]" value="other">
-            </label>
-            <label class="day-selector-label">
-              4
-              <input class="day-selector" type="radio" ng-model="formData.g.days.4" name="formData.g.days[4]" value="other">
-            </label>
-            <label class="day-selector-label">
-              5
-              <input class="day-selector" type="radio" ng-model="formData.g.days.5" name="formData.g.days[5]" value="other">
-            </label>
-            <label class="day-selector-label">
-              6
-              <input class="day-selector" type="radio" ng-model="formData.g.days.6" name="formData.g.days[6]" value="other">
-            </label>
-            <label class="day-selector-label">
-              7
-              <input class="day-selector" type="radio" ng-model="formData.g.days.7" name="formData.g.days[7]" value="other">
-            </label>
-            <label class="day-selector-label">
-              8
-              <input class="day-selector" type="radio" ng-model="formData.g.days.8" name="formData.g.days[8]" value="other">
-            </label>
-          </div> <!-- End Other Class Day Selection -->
+            Alternate Class Days:
+            <div class="day-selector-row">
+              <span ng-repeat="n in [] | range:1:8"
+                    ng-init="formData.g.alternate.days = []">
+                <input class="day-selector-radio"
+                       type="radio"
+                       name="formData.g.days[{{n}}]"
+                       id="formData.g.alternate.days[{{n}}]"
+                       value="{{n}}"
+                       ng-model="formData.g.alternate.days[n]"
+                       ng-click="deselectDays($event)">
+                <label class="day-selector"
+                       for="formData.g.alternate.days[{{n}}]">
+                  {{n}}
+                </label>
+              </span>
+            </div>
+          </div> <!-- End Alternate Class Day Selection -->
         </div> <!-- End Alternate Class -->
 
         <div class="center-container">
-          <button class="button button-schedu button-register center-content" ng-disabled="registerForm.$invalid" type="submit">I'm all done, sign me up!</button>
+          <button class="button button-schedu button-register center-content"
+                  type="submit"
+                  ng-disabled="registerForm.$invalid">
+
+
+            I'm all done, sign me up!
+          </button>
         </div>
 
       </div> <!-- End period sections container -->

@@ -91,39 +91,6 @@ angular.module('schedu.services', [])
   ////////////////////////////////////////
 
   /**
-   * Sync user to database
-   * @param  {user object} userData User object containing first name, last name,
-   *                                phone number, classes, phone number, AND revision
-   * @return {response object}      Response object containing error (string or false)
-   *                                and response (string or false)
-   */
-  this.syncUser = function (userData) {
-
-    // Setup promise
-    var request = $q.defer();
-
-    // Write user data to database
-    userDb.put(userData, userData.phoneNumber, userData._rev, function () {
-
-      userDb.get(userData.phoneNumber, function (error, data) {
-
-        if (error == null) {
-          error = false;
-        }
-
-        StorageService.storeUser(data);
-
-        // Resolve promise
-        request.resolve({"data": data, "error": error});
-
-      });
-    });
-
-    return request.promise;
-
-  };
-
-  /**
    * Create user
    * @param  {user object} userData User object containing first name, last name,
    *                                phone number, classes, phone number
@@ -132,28 +99,36 @@ angular.module('schedu.services', [])
    */
   this.createUser = function (userData) {
 
-    // Capitalize first name, last name, and class names
-    // @TODO: make registration form take care of this
-    userData.firstName = userData.firstName.charAt(0).toUpperCase() + userData.firstName.slice(1);
-    userData.lastName = userData.lastName.charAt(0).toUpperCase() + userData.lastName.slice(1);
-    _.each(['a','b','c','d','e','f','g'], function (period) {
-        userData[period].name = userData[period].name.charAt(0).toUpperCase() + userData[period].name.slice(1);
-        if (userData[period].alternate) {
-          userData[period].alternate.name = userData[period].alternate.name.charAt(0).toUpperCase() + userData[period].alternate.name.slice(1);
-        }
-    });
-
-    // Add user feedback votes object
-    userData["feedback"] = {
-      "votes": 3,
-      "voteItems": []
-    };
-
     // Setup promise
     var request = $q.defer();
 
     // Write user data to database
     userDb.put(userData, userData.phoneNumber, function (error, data) {
+      
+      if (error == null) {
+        error = false;
+      }
+
+      // Resolve promise
+      request.resolve({"data": data, "error": error});
+    });
+
+    return request.promise;
+  };
+
+  /**
+   * Update user
+   * @param  {user object} userData User object containing _id, _rev, first name, 
+   *                                last name, phone number, classes, phone number
+   * @return {response object}      Response object containing error (string or false)
+   *                                and response (string or false)
+   */
+  this.updateUser = function (userData) {
+    // Setup promise
+    var request = $q.defer();
+
+    // Write user data to database
+    userDb.put(userData, userData._id, userData._rev, function (error, data) {
       
       if (error == null) {
         error = false;
@@ -176,7 +151,7 @@ angular.module('schedu.services', [])
    *                                phone number, classes, phone number
    */
   this.storeUser = function (userData) {
-    var userData = JSON.stringify(userData);
+    var userData = angular.toJson(userData);
     window.localStorage.setItem('SchedUser', userData);
   };
 
@@ -198,49 +173,81 @@ angular.module('schedu.services', [])
     return user;
   };
 
+  /**
+   * Delete user data from local storage
+   */
+  this.deleteUser = function () {
+    localStorage.removeItem('SchedUser');
+  };
+
 })
 
-.factory('ClassDaysFactory', function() {
+.factory('SyncUserFactory', function ($q, DataService) {
+
+  /**
+   * Sync user to database
+   * @param  {user object} userData User object containing first name, last name,
+   *                                phone number, classes, phone number, AND revision
+   * @return {response object}      Response object containing error (string or false)
+   *                                and response (string or false)
+   */
+  return {
+    sync: function (userData) {
+
+      // Setup promise
+      var request = $q.defer();
+
+      // Get fresh user data
+      DataService.getUser(userData._id).then(function (response) {
+
+        if (response.data) {
+          response.data.usage = userData.usage;
+        }
+
+        return DataService.updateUser(response.data);
+
+      }).then(function (response) {
+
+        return DataService.getUser(userData._id)
+
+      }).then(function (response) {
+
+        request.resolve(response);
+      
+      });
+
+      return request.promise;
+    }
+
+  };
+})
+
+.factory('ClassDaysFactory', function ($filter) {
 
   return {
 
     /**
-     * Decides which days a class is on given a list of "primary" and "alternate"
-     * @TODO remove the need for this factory by rewriting registration form
-     * @param  {object} formData  All data from registration form
-     * @return {object}          All data from registration form, days fixed
+     * Cleans up form data by parsing lists of days and
+     * alternate days from each class
+     * @param  {object} formData Contains periods a-g, each of which
+     *                           might contain days[] and alternate.days[],
+     *                           in format [1: "1", 2: "2", ... 8: "8"]
+     * @return {object}          Original form data object but with lists
+     *                           of days in format [1,2,3,4,5,6,7,8]
      */
     make: function (formData) {
-
       var dayLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
       // For each period
       _.each(dayLetters, function (dayLetter, index, list) {
 
-        var currentClass = formData[dayLetter];
+        // If current class has an alternate
+        if (formData[dayLetter].alternate.name) {
 
-        // If current class meets on specific days
-        if (currentClass.days) {
-
-          var primaryDays = [];
-          var alternateDays = [];
-
-          // For each day
-          _.each(currentClass.days, function (element, index) {
-
-            if (element == "primary") {
-              primaryDays.push(parseInt(index, 10)); // Add day number
-            } else {
-              alternateDays.push(parseInt(index, 10)); // Add day number
-            }
-
-          });
-
-          currentClass.days = primaryDays;
-          currentClass.alternate.days = alternateDays;
+          formData[dayLetter].days = $filter('classdays')(formData[dayLetter].days);
+          formData[dayLetter].alternate.days = $filter('classdays')(formData[dayLetter].alternate.days);
         }
 
-        formData[dayLetter] = currentClass;
       });
 
       return formData;
@@ -249,6 +256,37 @@ angular.module('schedu.services', [])
 })
 
 .factory('ClassOrderFactory', function () {
+
+  /**
+   * Returns class that occurs on dayNum, defaults
+   * to "Study" if neither class occurs on dayNum.
+   * @param  {object} primaryClass   Contains name and list of days
+   * @param  {object} alternateClass Contains name and list of days
+   * @param  {integer} dayNum        Number of day, 1-8
+   * @return {object}                primaryClass, alternateClass, or 
+   *                                 {'name': "Study"}
+   */
+  function decideWhichClass(primaryClass, alternateClass, dayNum) {
+
+    // Primary class occurs today
+    if (_.contains(primaryClass.days, dayNum)) {
+
+      return primaryClass;
+
+    // Alternate class occurs today
+    } else if (_.contains(alternateClass.days, dayNum)) {
+
+      return alternateClass;
+
+    // Neither class occurs today; default to study
+    } else {
+
+      return {"name": "Study"};
+    }
+
+  }
+
+
   return {
     
     /**
@@ -260,7 +298,7 @@ angular.module('schedu.services', [])
      * @return {string or boolean}     Schedule as string in A1 notation or false if
      *                                 schedule object doesn't have a period order
      */
-    parseSchedule: function (scheduleObject) {
+    makeScheduleString: function (scheduleObject) {
 
       var scheduleString = false;
 
@@ -290,65 +328,57 @@ angular.module('schedu.services', [])
 
       var classOrder = [];
 
-      // If holiday
+      // Holiday
       if (scheduleObject.special == "holiday") {
 
         classOrder.push({"name": scheduleObject.holiday});
+        //@TODO getschedule for next school day
 
+      // Normal day
       } else {
 
+        var currentClass, classToAdd;
+
         // Each period in the day's schedule
-        _.each(scheduleObject.periodOrder, function (currentPeriod, index) {
+        _.each(scheduleObject.periodOrder, function (currentPeriod, periodNum, periodOrder) {
 
           // Period is a letter, ex: "a"
           if (currentPeriod.length == 1) {
 
-            var currentClass = userData[currentPeriod];
+            currentClass = userData[currentPeriod];
+            
+            // Class doesn't alternate
+            if (!currentClass.alternate) {
 
-            // Class alternates with another class
-            if (currentClass && currentClass.alternate) {
+              classToAdd = currentClass;
 
-              // Current class occurs today
-              if (_.contains(currentClass.days, scheduleObject.dayNumber)) {
-
-                // Slim object down to only required attributes
-                currentClass = {
-                  "name": currentClass.name, 
-                  "teacher": currentClass.teacher, 
-                  "room": currentClass.room
-                };
-
-              // Alternate class occurs today
-              } else if (_.contains(currentClass.alternate.days, scheduleObject.dayNumber)) {
-
-                currentClass = currentClass.alternate;
-
-              // Neither class occurs today; default to study
-              } else {
-
-                // Default to study
-                currentClass = {
-                  "name": "Study"
-                };
-              }
-
+            // Class does alternate
+            } else {
+              classToAdd = decideWhichClass(currentClass, currentClass.alternate, scheduleObject.dayNumber);
             }
 
-            currentClass.letter = currentPeriod.toUpperCase();
-            classOrder.push(currentClass);
+            classToAdd.letter = currentPeriod.toUpperCase();
+
+            // Add lunch if third to last period
+            // Handles normal and activity period schedules
+            if (periodNum == periodOrder.length - 3) {
+              classToAdd.lunch = true;
+            }
 
           // Special period, ex: "Activity Period"
           } else {
-
-            var specialPeriod = {
-              "name": currentPeriod // Name of special period instead of letter
+            classToAdd = {
+              "name": currentPeriod, // Name of special period
+              "letter": "Sp"
             }
-
-            specialPeriod.letter = "Sp";
-            classOrder.push(specialPeriod);
           }
+
+          // Add class to class order
+          classOrder.push(classToAdd);
+
+
         });
-      } // End if holiday
+      } // End else normal day
       
       return classOrder;
     }
@@ -385,6 +415,26 @@ angular.module('schedu.services', [])
 })
 
 .factory('DateFactory', function () {
+
+  /**
+   * If day is a weekend, change date to next Monday
+   * @param  {moment} day Moment object
+   * @return {moment}     Moment object
+   */
+  function skipWeekend(day) {
+
+    // Saturday
+    if (day.weekday() == 6) {
+      day.add(2, 'days');
+
+    // Sunday
+    } else if (day.weekday() == 0) {
+      day.add(1, 'days');
+    }
+
+    return day;
+  }
+
   return {
 
     /**
@@ -396,12 +446,22 @@ angular.module('schedu.services', [])
 
       currentDay = moment();
 
-      // If weekend, change date to next Monday
-      if (currentDay.isoWeekday() > 5) {
-        currentDay.add(currentDay.isoWeekday()-5, 'days');
-      }
+      currentDay = skipWeekend(currentDay);      
 
       return currentDay;
+    },
+
+    /**
+     * Return next non-weekend day after today
+     * @return {moment object} Moment() of the next day's date
+     */
+    nextDay: function () {
+
+      nextDay = moment().add(1, 'days');
+
+      nextDay = skipWeekend(nextDay);
+
+      return nextDay;
     },
 
     /**
@@ -423,13 +483,108 @@ angular.module('schedu.services', [])
   }
 })
 
+.factory('RegistrationFactory', function ($filter, UsageFactory) {
+
+  return {
+
+    process: function (userData) {
+
+      // Capitalize first name, last name, and class names
+      // @TODO: make registration form take care of this
+      userData.firstName = $filter('sentencecase')(userData.firstName);
+      userData.lastName = $filter('sentencecase')(userData.lastName);
+
+      _.each(['a','b','c','d','e','f','g'], function (periodLetter) {
+          userData[periodLetter].name = $filter('sentencecase')(userData[periodLetter].name);
+          
+          // Capitalize alternate class name if exists
+          if (userData[periodLetter].alternate.name) {
+            userData[periodLetter].alternate.name = $filter('sentencecase')(userData[periodLetter].alternate.name);
+          
+          // If no alternate, delete all associated fields
+          } else {
+            delete userData[periodLetter].days;
+            delete userData[periodLetter].alternate;
+          }
+      });
+
+      // Add user feedback info
+      userData["feedback"] = {
+        "votes": 3,
+        "voteItems": []
+      };
+
+      // Add version and platform info
+      userData["usage"] = UsageFactory.get({});
+
+      return userData;
+
+    }
+  }
+})
+
+.factory('UsageFactory', function (appVersion) {
+
+  return {
+
+    get: function (usage) {
+
+      var registerDate;
+
+      // Supply register date from existing usage object
+      if (usage) {
+        registerDate = usage.registerDate;
+      } else {
+        registerDate = moment().format("MM-DD-YY");
+      }
+
+      return {
+        "appVersion": appVersion,
+        "platform": {
+          "name": ionic.Platform.platform(),
+          "version": ionic.Platform.version()
+        },
+        "lastOpen": moment().format("MM-DD-YY hh:mm:ssa"),
+        "registerDate": registerDate
+      }
+    }
+  }
+})
+
+.factory('PhoneNumberFactory', function ($filter) {
+  return {
+    parse: function (phoneNumber) {
+
+      // Set to empty string if undefined
+      phoneNumber = phoneNumber || "";
+
+      // Reject any characters not 0-9
+      phoneNumber = phoneNumber.replace(/[^0-9]+/g, '');
+
+      // Add dashes
+      phoneNumber = $filter('phonenumber')(phoneNumber);
+
+      return phoneNumber;
+    }
+  }
+})
+
 .factory('LoadingFactory', function ($ionicLoading) {
   return {
     show: function () {
       $ionicLoading.show({
-        templateUrl: '/templates/loader.html',
-        noBackdrop: true
+        templateUrl: 'templates/loader.html',
+        noBackdrop: false
       });
+    },
+    showNoConnection: function () {
+      $ionicLoading.show({
+        templateUrl: 'templates/noconnection.html',
+        noBackdrop: false
+      });
+    },
+    quickHide: function () {
+      $ionicLoading.hide();
     },
     hide: function () {
       setTimeout(function(){

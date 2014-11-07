@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="121.859px" height="101.687px" viewBox="0 0 121.859 101.687" enable-background="new 0 0 121.859 101.687"
+	 xml:space="preserve">
+<path fill="none" stroke="#215128" stroke-width="14" stroke-miterlimit="10" d="M4.95,30.188
+	c30.917-30.917,81.043-30.917,111.959,0"/>
+<path fill="none" stroke="#215128" stroke-width="14" stroke-miterlimit="10" d="M22.628,47.865c21.12-21.12,55.484-21.12,76.604,0"
+	/>
+<path fill="none" stroke="#215128" stroke-width="14" stroke-miterlimit="10" d="M40.306,65.542
+	c11.372-11.372,29.876-11.371,41.248,0"/>
+<defs>
+	<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="46.91" y="73.648" width="28.038" height="28.038">
+		
+			<feColorMatrix  type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0" color-interpolation-filters="sRGB" result="source"/>
+	</filter>
+</defs>
+<mask maskUnits="userSpaceOnUse" x="46.91" y="73.648" width="28.038" height="28.038" id="SVGID_1_">
+	<g filter="url(#Adobe_OpacityMaskFilter)">
+		
+			<rect x="-32.901" y="-141.652" transform="matrix(0.7071 0.7071 -0.7071 0.7071 -14.8136 -57.0901)" width="188.815" height="190.452"/>
+	</g>
+</mask>
+<path mask="url(#SVGID_1_)" fill="none" stroke="#215128" stroke-width="14" stroke-miterlimit="10" d="M65.897,92.635
+	c-2.717,2.718-7.287,2.737-9.979,0.044c-2.693-2.693-2.674-7.264,0.042-9.981c2.717-2.717,7.288-2.735,9.983-0.043
+	C68.635,85.347,68.615,89.917,65.897,92.635z"/>
+</svg>

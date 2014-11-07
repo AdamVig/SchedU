@@ -233,27 +233,31 @@ input[type="radio"]:checked + .day-selector {
 .period-title {
   color: #fff;
   font-size: 1.25em;
+  opacity: 0.75;
 }
 .a-period {
-  background-color: hsla(291, 74%, 65%, 0.75);
+  background-color: hsla(291, 74%, 65%, 1);
 }
 .b-period {
-  background-color: hsla(145, 63%, 49%, 0.75);
+  background-color: hsla(145, 63%, 49%, 1);
 }
 .c-period {
-  background-color: hsla(28, 80%, 52%, 0.75);
+  background-color: hsla(28, 80%, 52%, 1);
 }
 .d-period {
-  background-color: hsla(283, 39%, 53%, 0.75);
+  background-color: hsla(283, 39%, 53%, 1);
 }
 .e-period {
-  background-color: hsla(6, 78%, 57%, 0.75);
+  background-color: hsla(6, 78%, 57%, 1);
 }
 .f-period {
-  background-color: hsla(48, 89%, 50%, 0.75);
+  background-color: hsla(48, 89%, 50%, 1);
 }
 .g-period {
-  background-color: hsla(204, 70%, 53%, 0.75);
+  background-color: hsla(204, 70%, 53%, 1);
+}
+.sp-period {
+  background-color: hsla(210, 29%, 29%, 1);
 }
 /**
  * Utility

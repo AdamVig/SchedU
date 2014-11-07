@@ -1,32 +1,42 @@
 /**
  * General Styles
  */
-.logo {
-  width: 200px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin-top: 25px;
-  margin-bottom: 10px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.back-link {
-  margin-top: 80px;
-  white-space: nowrap
-}
 .has-header {
-  top: 120px;
+  top: 95px;
 }
 .bar {
-  height: 120px;
+  height: 95px;
+  border-bottom: 1px solid #ddd; /* Normal-size bottom border */
+  background-image: none; /* Disable too-thin bottom border */
+}
+.bar-header .title {
+  margin-top: 25px;
+  height: 94px;
+  line-height: 95px;
+}
+/* iOS Specific Overrides to fix logo overlap */
+.platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
+  margin-top: 25px;
+}
+.platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) {
+  height: 95px;
+}
+.platform-ios7.platform-cordova:not(.fullscreen) .has-header {
+  top: 95px;
+}
+.back-arrow {
+  position: absolute;
+  bottom: 10%;
+  left: 15px;
+}
+.bar-header .ion-arrow-left-c {
+  font-size: 40px;
 }
 .button.button-schedu,
 .button.button-schedu-outline.activated  {
- border-color: #215127;
- background-color: #215127;
- color: #fff;
+  border-color: #215127;
+  background-color: #215127;
+  color: #fff;
 }
 .button.button-schedu-outline,
 .button.button-schedu.activated {
@@ -48,10 +58,18 @@
 /**
  * Loader
  */
-.loader-container {
- position: relative;
+.backdrop {
+  background-color: #235128;
 }
-.u-white-container {
+.loading {
+  background-color: rgba(0, 0, 0, 0);
+}
+.loading .loader-container,
+.loading .network-loader {
+  position: relative;
+}
+.loading .loader-container .u-white-container,
+.loading .network-loader .network-white-container {
  position: absolute;
  top: 0;
  left: 0;
@@ -59,7 +77,11 @@
  -webkit-animation: loader-fill 2s infinite alternate;
          animation: loader-fill 2s infinite alternate;
 }
-
+.network-white-container,
+.loading .network-loader img,
+.loading .network-green-container img {
+  width: 100%;
+}
 @-webkit-keyframes loader-fill {
  0% {
    height: 100%;
@@ -71,11 +93,15 @@
 
 @keyframes loader-fill {
  0% {
-   height: 0;
- }
- 100% {
    height: 100%;
  }
+ 100% {
+   height: 0;
+ }
+}
+.loader-text {
+  color: #fff;
+  text-shadow: #215127 2px 2px 0;
 }
 /**
  * Schedule Page
@@ -148,23 +174,49 @@ a {
 /**
  * Login/Register Forms
  */
- .error {
-   color: darkred;
- }
- .login-error {
-   margin-bottom: 10px;
-   font-size: 1.25em;
- }
- .error .tel-example {
-   font-weight: bold;
- }
- .ng-invalid {
-   border-color: darkred;
- }
- .day-selector {
-   margin-right: 5px !important;
- }
+.error {
+  color: darkred;
+}
+.login-error {
+  margin-bottom: 10px;
+  font-size: 1.25em;
+}
+.error .tel-example {
+  font-weight: bold;
+}
+.ng-invalid {
+  border-color: darkred;
+}
+.day-selector-row {
+  margin-top: 10px;
+}
+.day-selector {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  padding: 3px;
+  background-color: #aaa;
+  color: #fff;
+  font-size: 16px;
+  vertical-align: middle;
+  text-align: center;
+}
+.toggle input:checked + .track {
+  border-color: #085102;
+  background-color: #085102;
+}
+input[type="radio"]:checked + .day-selector {
+  background-color: #085102;
+}
+.day-selector-radio {
+  display: none;
+}
 .toggle-label {
+  font-size: 14px;
+  font-style: italic;
+}
+.label-invalid {
+  color: darkred;
   font-style: italic;
 }
 .button.button-register {
@@ -177,6 +229,31 @@ a {
   overflow: inherit;
   text-overflow: inherit;
   white-space: normal;
+}
+.period-title {
+  color: #fff;
+  font-size: 1.25em;
+}
+.a-period {
+  background-color: hsla(291, 74%, 65%, 0.75);
+}
+.b-period {
+  background-color: hsla(145, 63%, 49%, 0.75);
+}
+.c-period {
+  background-color: hsla(28, 80%, 52%, 0.75);
+}
+.d-period {
+  background-color: hsla(283, 39%, 53%, 0.75);
+}
+.e-period {
+  background-color: hsla(6, 78%, 57%, 0.75);
+}
+.f-period {
+  background-color: hsla(48, 89%, 50%, 0.75);
+}
+.g-period {
+  background-color: hsla(204, 70%, 53%, 0.75);
 }
 /**
  * Utility

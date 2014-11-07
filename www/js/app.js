@@ -1,8 +1,6 @@
-angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers'])
+angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers', 'schedu.constants', 'schedu.filters'])
 
-.constant("dbUrl", "https://schedu:G3tSch3dU@schedu.cloudant.com/")
-
-.config(function($stateProvider, $urlRouterProvider, dbUrl) {
+.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
   $stateProvider
 
@@ -20,17 +18,48 @@ angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers'])
 
     .state('login', {
       url: '/login',
-      templateUrl: 'templates/login.html',
-      controller: 'LoginCtrl'
+      templateUrl: 'templates/login.html'
     })
 
     .state('register', {
       url: '/register',
-      templateUrl: 'templates/register.html',
+      templateUrl: 'templates/register.html'
+    })
+
+    .state('register-new', {
+      url: '/register-new',
+      templateUrl: 'templates/register-new.html',
       controller: 'RegisterCtrl'
     });
 
   $urlRouterProvider.otherwise('/schedule');
+
+})
+
+.run(function($window, $rootScope) {
+
+  /**
+   * Check if device has internet connection
+   * Directly sets $rootScope.online variable
+   * because img.* functions are asynchronous
+   */
+  $rootScope.checkOnLine = function () {
+
+    var online;
+    var img = new Image();
+    
+    img.onload = function () {
+      $rootScope.online = true;
+    };
+
+    img.onerror = function () {
+      $rootScope.online = false;
+    };
+    img.src = "http://google.com/favicon.ico?" + Math.round(Math.random() * 100000);
+
+  };
+
+  $rootScope.checkOnLine();
 
 });
 

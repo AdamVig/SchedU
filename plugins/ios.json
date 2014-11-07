@@ -30,6 +30,11 @@
                         }
                     ]
                 }
+            },
+            "framework": {
+                "parents": {
+                    "SystemConfiguration.framework": []
+                }
             }
         }
     },

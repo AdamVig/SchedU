@@ -1,0 +1,99 @@
+<!-- INDIVIDUAL PERIOD SECTION -->
+<div class="item item-divider period-title {{letter}}-period">{{letter | uppercase}} Period</div>
+<!-- PRIMARY CLASS NAME INPUT -->
+<label class="item item-input">
+  <span class="input-label">Class Name:</span>
+  <input type="text" ng-maxlength="20" required ng-model="formData[$index].name" name="{{letter}}Primary">
+</label>
+<small class="error item" ng-show="registerForm.{{letter}}Primary.$invalid && registerForm.{{letter}}Primary.$dirty">
+  Uh oh! That class name is either too long or too short. Try again.
+</small>
+<!-- ALTERNATING CLASS TOGGLE -->
+<div class="item item-toggle">
+  <span class="toggle-label">Alternates with another class</span>
+  <label class="toggle">
+    <input type="checkbox" ng-model="formData[0].alternatesClass">
+    <div class="track">
+       <div class="handle"></div>
+    </div>
+  </label>
+</div>
+<div ng-show="formData[0].lternatesClass">
+  <!-- Alternate Class Name INPUT -->
+  <label class="item item-input">
+    <span class="input-label">Alternate Class Name:</span>
+    <input type="text" ng-model="formData[0].alternate.name">
+  </label>
+  <!-- PRIMARY CLASS DAY SELECTION -->
+  <div class="item days-selection">
+    Primary Class Days:<br>
+    <label class="day-selector-label">
+      1
+      <input class="day-selector" type="radio" ng-model="formData[0].days.1" name="formData[0].days[1]" value="primary">
+    </label>
+    <label class="day-selector-label">
+      2
+      <input class="day-selector" type="radio" ng-model="formData[0].days.2" name="formData[0].days[2]" value="primary">
+    </label>
+    <label class="day-selector-label">
+      3
+      <input class="day-selector" type="radio" ng-model="formData[0].days.3" name="formData[0].days[3]" value="primary">
+    </label>
+    <label class="day-selector-label">
+      4
+      <input class="day-selector" type="radio" ng-model="formData[0].days.4" name="formData[0].days[4]" value="primary">
+    </label>
+    <label class="day-selector-label">
+      5
+      <input class="day-selector" type="radio" ng-model="formData[0].days.5" name="formData[0].days[5]" value="primary">
+    </label>
+    <label class="day-selector-label">
+      6
+      <input class="day-selector" type="radio" ng-model="formData[0].days.6" name="formData[0].days[6]" value="primary">
+    </label>
+    <label class="day-selector-label">
+      7
+      <input class="day-selector" type="radio" ng-model="formData[0].days.7" name="formData[0].days[7]" value="primary">
+    </label>
+    <label class="day-selector-label">
+      8
+      <input class="day-selector" type="radio" ng-model="formData[0].days.8" name="formData[0].days[8]" value="primary">
+    </label>
+  </div>
+  <!-- ALTERNATE CLASS DAY SELECTION -->
+  <div class="item days-selection">
+    Alternate Class Days:<br>
+    <label class="day-selector-label">
+      1
+      <input class="day-selector" type="radio" ng-model="formData[0].days.1" name="formData[0].days[1]" value="other">
+    </label>
+    <label class="day-selector-label">
+      2
+      <input class="day-selector" type="radio" ng-model="formData[0].days.2" name="formData[0].days[2]" value="other">
+    </label>
+    <label class="day-selector-label">
+      3
+      <input class="day-selector" type="radio" ng-model="formData[0].days.3" name="formData[0].days[3]" value="other">
+    </label>
+    <label class="day-selector-label">
+      4
+      <input class="day-selector" type="radio" ng-model="formData[0].days.4" name="formData[0].days[4]" value="other">
+    </label>
+    <label class="day-selector-label">
+      5
+      <input class="day-selector" type="radio" ng-model="formData[0].days.5" name="formData[0].days[5]" value="other">
+    </label>
+    <label class="day-selector-label">
+      6
+      <input class="day-selector" type="radio" ng-model="formData[0].days.6" name="formData[0].days[6]" value="other">
+    </label>
+    <label class="day-selector-label">
+      7
+      <input class="day-selector" type="radio" ng-model="formData[0].days.7" name="formData[0].days[7]" value="other">
+    </label>
+    <label class="day-selector-label">
+      8
+      <input class="day-selector" type="radio" ng-model="formData[0].days.8" name="formData[0].days[8]" value="other">
+    </label>
+  </div> <!-- End Other Class Day Selection -->
+</div> <!-- End Alternate Class -->

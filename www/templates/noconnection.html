@@ -1,0 +1,9 @@
+<div class="network-loader" ng-controller="NetworkCtrl" ng-click="testNetwork()">
+  <img src="img/network-green.svg">
+  <div class="network-white-container">
+    <img src="img/network-white.svg">
+  </div>
+  <h1 class="loader-text">No Connection</h1>
+  <h2 class="loader-text" ng-hide="testingNetwork">Tap here to retry</h2>
+  <h2 class="loader-text" ng-show="testingNetwork">Retrying...</h2>
+</div>

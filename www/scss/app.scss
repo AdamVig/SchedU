@@ -1,3 +1,9 @@
+
+
+
+@import "ionic/ionic";
+@import "period-blocks";
+
 /**
  * General Styles
  */
@@ -7,7 +13,7 @@
 .bar {
   height: 95px;
   border-bottom: 1px solid #ddd; /* Normal-size bottom border */
-  background-image: none; /* Disable too-thin bottom border */
+  background-image: none /* Disable too-thin bottom border */
 }
 .bar-header .title {
   margin-top: 25px;
@@ -70,12 +76,16 @@
 }
 .loading .loader-container .u-white-container,
 .loading .network-loader .network-white-container {
- position: absolute;
- top: 0;
- left: 0;
- overflow: hidden;
- -webkit-animation: loader-fill 2s infinite alternate;
+  position: absolute;
+  top: 15%;
+  left: 0;
+  overflow: hidden;
+  -webkit-animation: loader-fill 2s infinite alternate;
          animation: loader-fill 2s infinite alternate;
+}
+.network-white-container img,
+.u-white-container img {
+  width: 80%;
 }
 .network-white-container,
 .loading .network-loader img,

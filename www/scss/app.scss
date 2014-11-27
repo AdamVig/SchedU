@@ -4,9 +4,15 @@ $darker-gray: #aaa;
 $light-gray: #c8c9c7;
 $lighter-gray: #eee;
 
+@mixin transition-all($time) {
+  -webkit-transition: all $time;
+  transition: all $time;
+}
+
 
 @import "ionic/ionic";
 @import "period-blocks";
+@import "loader";
 
 /**
  * General Styles
@@ -66,58 +72,6 @@ $lighter-gray: #eee;
   font-size: 1.5em;
 }
 /**
- * Loader
- */
-.backdrop {
-  background-color: #235128;
-}
-.loading {
-  background-color: rgba(0, 0, 0, 0);
-}
-.loading .loader-container,
-.loading .network-loader {
-  position: relative;
-}
-.loading .loader-container .u-white-container,
-.loading .network-loader .network-white-container {
-  position: absolute;
-  top: 15%;
-  left: 0;
-  overflow: hidden;
-  -webkit-animation: loader-fill 2s infinite alternate;
-         animation: loader-fill 2s infinite alternate;
-}
-.network-white-container img,
-.u-white-container img {
-  width: 80%;
-}
-.network-white-container,
-.loading .network-loader img,
-.loading .network-green-container img {
-  width: 100%;
-}
-@-webkit-keyframes loader-fill {
- 0% {
-   height: 100%;
- }
- 100% {
-   height: 0;
- }
-}
-
-@keyframes loader-fill {
- 0% {
-   height: 100%;
- }
- 100% {
-   height: 0;
- }
-}
-.loader-text {
-  color: #fff;
-  text-shadow: #215127 2px 2px 0;
-}
-/**
  * Schedule Page
  */
 .date-header {
@@ -132,7 +86,7 @@ $lighter-gray: #eee;
   padding-top: 5px;
 }
 .class-list h2 {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 .schedu-icon-block {
   padding-top: 0;

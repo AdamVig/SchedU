@@ -1,0 +1,54 @@
+.backdrop {
+  background-color: #235128;
+}
+.loading {
+  background-color: rgba(0, 0, 0, 0);
+}
+.loading .loader-container,
+.loading .network-loader {
+  position: relative;
+}
+.u-green,
+.network-green {
+  visibility: hidden;
+}
+.loading .loader-container .u-white-container,
+.loading .network-loader .network-white-container {
+  position: absolute;
+  top: 15%;
+  left: 0;
+  overflow: hidden;
+  -webkit-animation: loader-fill 2s infinite alternate;
+         animation: loader-fill 2s infinite alternate;
+  @include transition-all(.2s);
+}
+.network-white-container img,
+.u-white-container img {
+  width: 80%;
+}
+.network-white-container,
+.loading .network-loader img,
+.loading .network-green-container img {
+  width: 100%;
+}
+@-webkit-keyframes loader-fill {
+ 0% {
+   height: 100%;
+ }
+ 100% {
+   height: 0;
+ }
+}
+
+@keyframes loader-fill {
+ 0% {
+   height: 100%;
+ }
+ 100% {
+   height: 0;
+ }
+}
+.loader-text {
+  color: #fff;
+  text-shadow: #215127 2px 2px 0;
+}

@@ -7,6 +7,7 @@ platforms/android/gen/
 platforms/android/res/xml/config.xml
  
 www/js/constants.js
+.sass-cache/
 
 # iOS
 platforms/ios/build/

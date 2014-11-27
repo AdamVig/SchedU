@@ -465,6 +465,17 @@ angular.module('schedu.services', [])
     },
 
     /**
+     * Return previous day
+     * @return {moment object} Moment() of the previous day's date
+     */
+    previousDay: function () {
+
+      previousDay = moment().subtract(1, 'days');
+
+      return previousDay;
+    },
+
+    /**
      * Format date into weekday and full date format,
      * ex: todaysDate = September 27; dayOfWeek = Wednesday
      * @param  {string} date Date in format MM-DD-YY

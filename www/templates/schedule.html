@@ -24,7 +24,7 @@
       <ion-item class="schedule-item"
                 ng-repeat="class in classOrder">
 
-        <div class="day-letter {{class.letter | lowercase}}-period">
+        <div class="period-block {{class.letter | lowercase}}-period">
             {{class.letter}}
         </div>
         <h2 class="class-name">
@@ -36,7 +36,7 @@
 
       </ion-item>
       <a class="item schedule-item item-icon-right" href="#/feedback">
-        <div class="day-letter schedu-letter">
+        <div class="period-block schedu-icon-block">
           <img src="img/u.svg" height="40" width="40" alt="">
         </div>
         <h2>Give feedback... <i class="icon ion-chevron-right"></i></h2>

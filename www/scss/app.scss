@@ -1,4 +1,8 @@
-
+$schedu-green: #215732;
+$schedu-green-half-opacity: rgba(33, 87, 50, 0.5);
+$darker-gray: #aaa;
+$light-gray: #c8c9c7;
+$lighter-gray: #eee;
 
 
 @import "ionic/ionic";
@@ -127,21 +131,10 @@
 .schedule-item h2 {
   padding-top: 5px;
 }
-.day-letter {
-  width: 40px;
-  height: 40px;
-  margin-right: 20px;
-  padding-top: 10px;
-  float: left;
-  text-align: center;
-  color: #fff;
-  font-weight: bold;
-  font-size: 1.25em;
-}
 .class-list h2 {
     font-size: 1.5em;
 }
-.schedu-letter {
+.schedu-icon-block {
   padding-top: 0;
 }
 /**
@@ -244,30 +237,6 @@ input[type="radio"]:checked + .day-selector {
   color: #fff;
   font-size: 1.25em;
   opacity: 0.75;
-}
-.a-period {
-  background-color: hsla(291, 74%, 65%, 1);
-}
-.b-period {
-  background-color: hsla(145, 63%, 49%, 1);
-}
-.c-period {
-  background-color: hsla(28, 80%, 52%, 1);
-}
-.d-period {
-  background-color: hsla(283, 39%, 53%, 1);
-}
-.e-period {
-  background-color: hsla(6, 78%, 57%, 1);
-}
-.f-period {
-  background-color: hsla(48, 89%, 50%, 1);
-}
-.g-period {
-  background-color: hsla(204, 70%, 53%, 1);
-}
-.sp-period {
-  background-color: hsla(210, 29%, 29%, 1);
 }
 /**
  * Utility

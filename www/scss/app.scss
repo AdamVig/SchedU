@@ -4,11 +4,13 @@ $darker-gray: #aaa;
 $light-gray: #c8c9c7;
 $lighter-gray: #eee;
 
+$bar-height: 85px;
+$logo-top-margin: 15px;
+
 @mixin transition-all($time) {
   -webkit-transition: all $time;
-  transition: all $time;
+          transition: all $time;
 }
-
 
 @import "ionic/ionic";
 @import "period-blocks";
@@ -17,28 +19,23 @@ $lighter-gray: #eee;
 /**
  * General Styles
  */
-.has-header {
-  top: 95px;
-}
 .bar {
-  height: 95px;
-  border-bottom: 1px solid #ddd; /* Normal-size bottom border */
-  background-image: none /* Disable too-thin bottom border */
+  background-image: none /* Disable too-thin bottom border on header */
 }
 .bar-header .title {
-  margin-top: 25px;
-  height: 94px;
-  line-height: 95px;
+  margin-top: $logo-top-margin;
 }
-/* iOS Specific Overrides to fix logo overlap */
-.platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
-  margin-top: 25px;
-}
-.platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) {
-  height: 95px;
-}
-.platform-ios7.platform-cordova:not(.fullscreen) .has-header {
-  top: 95px;
+.platform-ios.platform-cordova {
+  // iOS7/8 has a status bar which sits on top of the header.
+  // Bump down everything to make room for it. However, if
+  // if its in Cordova, and set to fullscreen, then disregard the bump.
+  &:not(.fullscreen) {
+    .bar-header:not(.bar-subheader) {
+      > * {
+        margin-top: $ios-statusbar-height + $logo-top-margin;
+      }
+    }
+  }
 }
 .back-arrow {
   position: absolute;

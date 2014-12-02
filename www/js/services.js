@@ -414,7 +414,7 @@ angular.module('schedu.services', [])
   }
 })
 
-.factory('DateFactory', function () {
+.factory('DateFactory', function (dismissal) {
 
   /**
    * If day is a weekend, change date to next Monday
@@ -439,14 +439,20 @@ angular.module('schedu.services', [])
 
     /**
      * Gets today's date if not weekend, next 
-     * Monday's date if weekend
-     * @return {moment object} Moment() of the current day's date
+     * Monday's date if weekend; tomorrow's date if after
+     * dismissal time
+     * @return {moment object} Moment() of the current school
+     *                         day's date
      */
     currentDay: function () {
 
-      currentDay = moment();
+      currentDay = moment().hour(14).minute(20).second(0);
 
-      currentDay = skipWeekend(currentDay);      
+      currentDay = skipWeekend(currentDay); 
+
+      if (currentDay.isAfter(dismissal)) {
+        currentDay.add(1, 'days');
+      }
 
       return currentDay;
     },

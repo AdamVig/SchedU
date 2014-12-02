@@ -7,9 +7,9 @@ $lighter-gray: #eee;
 $bar-height: 85px;
 $logo-top-margin: 15px;
 
-@mixin transition-all($time) {
-  -webkit-transition: all $time;
-          transition: all $time;
+@mixin transition-out($time) {
+  -webkit-transition: all $time ease-in;
+          transition: all $time ease-in;
 }
 
 // The path for our ionicons font files, relative to the built CSS in www/css

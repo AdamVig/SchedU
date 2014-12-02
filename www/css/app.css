@@ -7836,8 +7836,8 @@ $ios-transition-box-shadow-end: -200px 0px 200px rgba(0,0,0,0.15), -5px 0px 5px 
 
 .backdrop {
   background-color: #235128;
-  -webkit-transition: all 0.1s;
-  transition: all 0.1s; }
+  -webkit-transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in; }
 
 .loading {
   background-color: rgba(0, 0, 0, 0); }
@@ -7849,8 +7849,8 @@ $ios-transition-box-shadow-end: -200px 0px 200px rgba(0,0,0,0.15), -5px 0px 5px 
   visibility: hidden; }
 
 .u-white-container, .network-white-container, .loader-text {
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s; }
+  -webkit-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in; }
 
 .loading .loader-container .u-white-container, .loading .network-loader .network-white-container {
   position: absolute;

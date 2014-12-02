@@ -1,6 +1,6 @@
 .backdrop {
   background-color: #235128;
-  @include transition-all(.1s);
+  @include transition-out(.1s);
 }
 .loading {
   background-color: rgba(0, 0, 0, 0);
@@ -16,7 +16,7 @@
 .u-white-container,
 .network-white-container,
 .loader-text {
-  @include transition-all(.2s);
+  @include transition-out(.2s);
 }
 .loading .loader-container .u-white-container,
 .loading .network-loader .network-white-container {

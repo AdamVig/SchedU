@@ -200,8 +200,13 @@ angular.module('schedu.services', [])
       // Get fresh user data
       DataService.getUser(userData._id).then(function (response) {
 
-        if (response.data) {
+        if (!response.error) {
           response.data.usage = userData.usage;
+
+        // User doesn't exist, get out of function
+        } else {
+          $q.reject({"data": null, "error": {"status": 404}});
+          return;
         }
 
         return DataService.updateUser(response.data);
@@ -220,39 +225,6 @@ angular.module('schedu.services', [])
     }
 
   };
-})
-
-.factory('ClassDaysFactory', function ($filter) {
-
-  return {
-
-    /**
-     * Cleans up form data by parsing lists of days and
-     * alternate days from each class
-     * @param  {object} formData Contains periods a-g, each of which
-     *                           might contain days[] and alternate.days[],
-     *                           in format [1: "1", 2: "2", ... 8: "8"]
-     * @return {object}          Original form data object but with lists
-     *                           of days in format [1,2,3,4,5,6,7,8]
-     */
-    make: function (formData) {
-      var dayLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
-
-      // For each period
-      _.each(dayLetters, function (dayLetter, index, list) {
-
-        // If current class has an alternate
-        if (formData[dayLetter].alternate.name) {
-
-          formData[dayLetter].days = $filter('classdays')(formData[dayLetter].days);
-          formData[dayLetter].alternate.days = $filter('classdays')(formData[dayLetter].alternate.days);
-        }
-
-      });
-
-      return formData;
-    }
-  }
 })
 
 .factory('ClassOrderFactory', function () {
@@ -507,18 +479,26 @@ angular.module('schedu.services', [])
     process: function (userData) {
 
       // Capitalize first name, last name, and class names
-      // @TODO: make registration form take care of this
       userData.firstName = $filter('sentencecase')(userData.firstName);
       userData.lastName = $filter('sentencecase')(userData.lastName);
 
       _.each(['a','b','c','d','e','f','g'], function (periodLetter) {
+
+          // Capitalize primary class name
           userData[periodLetter].name = $filter('sentencecase')(userData[periodLetter].name);
           
-          // Capitalize alternate class name if exists
+          // Class has an alternate
           if (userData[periodLetter].alternate.name) {
+
+            // Capitalize alternate class name
             userData[periodLetter].alternate.name = $filter('sentencecase')(userData[periodLetter].alternate.name);
           
-          // If no alternate, delete all associated fields
+            // Remove empty values from days arrays
+            userData[periodLetter].days = _.compact(userData[periodLetter].days);
+            userData[periodLetter].alternate.days = _.compact(userData[periodLetter].alternate.days);
+
+
+          // If no alternate, delete empty fields
           } else {
             delete userData[periodLetter].days;
             delete userData[periodLetter].alternate;
@@ -532,7 +512,7 @@ angular.module('schedu.services', [])
       };
 
       // Add version and platform info
-      userData["usage"] = UsageFactory.get({});
+      userData["usage"] = UsageFactory.get({"registerDate": moment().format("MM-DD-YY")});
 
       return userData;
 
@@ -548,13 +528,6 @@ angular.module('schedu.services', [])
 
       var registerDate;
 
-      // Supply register date from existing usage object
-      if (usage) {
-        registerDate = usage.registerDate;
-      } else {
-        registerDate = moment().format("MM-DD-YY");
-      }
-
       return {
         "appVersion": appVersion,
         "platform": {
@@ -562,7 +535,7 @@ angular.module('schedu.services', [])
           "version": ionic.Platform.version()
         },
         "lastOpen": moment().format("MM-DD-YY hh:mm:ssa"),
-        "registerDate": registerDate
+        "registerDate": usage.registerDate
       }
     }
   }

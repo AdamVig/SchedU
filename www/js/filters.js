@@ -39,24 +39,6 @@ angular.module('schedu.filters', [])
   };
 })
 
-.filter('classdays', function () {
-
-  return function (origDays) {
-    var days = [];
-
-    // Remove null values
-    origDays = _.compact(origDays);
-
-    // Create list of integer days
-    _.each(origDays, function (day) {
-      days.push(parseInt(day));
-    });
-
-    return days;
-
-  };
-})
-
 .filter('range', function() {
   return function(input, start, end) {
     start = parseInt(start);

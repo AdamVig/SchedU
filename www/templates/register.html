@@ -92,9 +92,9 @@
                        type="radio"
                        name="formData.a.days[{{n}}]"
                        id="formData.a.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.a.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.a.days[n-1]"
+                       ng-click="deselectDays(n, 'a')">
                 <label class="day-selector"
                        for="formData.a.days[{{n}}]">
                   {{n}}
@@ -112,9 +112,9 @@
                        type="radio"
                        name="formData.a.days[{{n}}]"
                        id="formData.a.alternate.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.a.alternate.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.a.alternate.days[n-1]"
+                       ng-click="deselectDays(n, 'a', 'alternate')">
                 <label class="day-selector"
                        for="formData.a.alternate.days[{{n}}]">
                   {{n}}
@@ -160,9 +160,9 @@
                        type="radio"
                        name="formData.b.days[{{n}}]"
                        id="formData.b.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.b.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.b.days[n-1]"
+                       ng-click="deselectDays(n, 'b')">
                 <label class="day-selector"
                        for="formData.b.days[{{n}}]">
                   {{n}}
@@ -180,9 +180,9 @@
                        type="radio"
                        name="formData.b.days[{{n}}]"
                        id="formData.b.alternate.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.b.alternate.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.b.alternate.days[n-1]"
+                       ng-click="deselectDays(n, 'b', 'alternate')">
                 <label class="day-selector"
                        for="formData.b.alternate.days[{{n}}]">
                   {{n}}
@@ -228,9 +228,9 @@
                        type="radio"
                        name="formData.c.days[{{n}}]"
                        id="formData.c.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.c.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.c.days[n-1]"
+                       ng-click="deselectDays(n, 'c')">
                 <label class="day-selector"
                        for="formData.c.days[{{n}}]">
                   {{n}}
@@ -248,9 +248,9 @@
                        type="radio"
                        name="formData.c.days[{{n}}]"
                        id="formData.c.alternate.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.c.alternate.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.c.alternate.days[n-1]"
+                       ng-click="deselectDays(n, 'c', 'alternate')">
                 <label class="day-selector"
                        for="formData.c.alternate.days[{{n}}]">
                   {{n}}
@@ -296,9 +296,9 @@
                        type="radio"
                        name="formData.d.days[{{n}}]"
                        id="formData.d.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.d.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.d.days[n-1]"
+                       ng-click="deselectDays(n, 'd')">
                 <label class="day-selector"
                        for="formData.d.days[{{n}}]">
                   {{n}}
@@ -316,9 +316,9 @@
                        type="radio"
                        name="formData.d.days[{{n}}]"
                        id="formData.d.alternate.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.d.alternate.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.d.alternate.days[n-1]"
+                       ng-click="deselectDays(n, 'd', 'alternate')">
                 <label class="day-selector"
                        for="formData.d.alternate.days[{{n}}]">
                   {{n}}
@@ -364,9 +364,9 @@
                        type="radio"
                        name="formData.e.days[{{n}}]"
                        id="formData.e.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.e.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.e.days[n-1]"
+                       ng-click="deselectDays(n, 'e')">
                 <label class="day-selector"
                        for="formData.e.days[{{n}}]">
                   {{n}}
@@ -384,9 +384,9 @@
                        type="radio"
                        name="formData.e.days[{{n}}]"
                        id="formData.e.alternate.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.e.alternate.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.e.alternate.days[n-1]"
+                       ng-click="deselectDays(n, 'e', 'alternate')">
                 <label class="day-selector"
                        for="formData.e.alternate.days[{{n}}]">
                   {{n}}
@@ -432,9 +432,9 @@
                        type="radio"
                        name="formData.f.days[{{n}}]"
                        id="formData.f.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.f.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.f.days[n-1]"
+                       ng-click="deselectDays(n, 'f')">
                 <label class="day-selector"
                        for="formData.f.days[{{n}}]">
                   {{n}}
@@ -452,9 +452,9 @@
                        type="radio"
                        name="formData.f.days[{{n}}]"
                        id="formData.f.alternate.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.f.alternate.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.f.alternate.days[n-1]"
+                       ng-click="deselectDays(n, 'f', 'alternate')">
                 <label class="day-selector"
                        for="formData.f.alternate.days[{{n}}]">
                   {{n}}
@@ -500,9 +500,9 @@
                        type="radio"
                        name="formData.g.days[{{n}}]"
                        id="formData.g.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.g.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.g.days[n-1]"
+                       ng-click="deselectDays(n, 'g')">
                 <label class="day-selector"
                        for="formData.g.days[{{n}}]">
                   {{n}}
@@ -520,9 +520,9 @@
                        type="radio"
                        name="formData.g.days[{{n}}]"
                        id="formData.g.alternate.days[{{n}}]"
-                       value="{{n}}"
-                       ng-model="formData.g.alternate.days[n]"
-                       ng-click="deselectDays($event)">
+                       ng-value="n"
+                       ng-model="formData.g.alternate.days[n-1]"
+                       ng-click="deselectDays(n, 'g', 'alternate')">
                 <label class="day-selector"
                        for="formData.g.alternate.days[{{n}}]">
                   {{n}}
@@ -536,8 +536,6 @@
           <button class="button button-schedu button-register center-content"
                   type="submit"
                   ng-disabled="registerForm.$invalid">
-
-
             I'm all done, sign me up!
           </button>
         </div>

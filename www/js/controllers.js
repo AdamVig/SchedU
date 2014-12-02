@@ -6,7 +6,6 @@ angular.module('schedu.controllers', [])
   $scope.testingNetwork = false;
   $scope.dateShow = false;
 
-
   $scope.logout = function () {
     LoadingFactory.show();
     StorageService.deleteUser();
@@ -43,7 +42,7 @@ angular.module('schedu.controllers', [])
         LoadingFactory.hide();
 
         // Update usage
-        localUser.usage = UsageFactory.get(localUser);
+        localUser.usage = UsageFactory.get(localUser.usage);
 
         return SyncUserFactory.sync(localUser);
 
@@ -67,9 +66,15 @@ angular.module('schedu.controllers', [])
     }).then(function (response) {
 
       // Successful sync; store user
-      if (response) {
+      if (!response.error) {
         localUser = response.data;
         StorageService.storeUser(response.data);
+
+      // User doesn't exist in database
+      } else if (response.error.status == 404) {
+        $state.go("login");
+        LoadingFactory.hide();
+        $scope.noUserFound = true;
       }
 
     });
@@ -109,38 +114,34 @@ angular.module('schedu.controllers', [])
   };
 })
 
-.controller('RegisterCtrl', function($scope, $state, $filter, LoadingFactory, $ionicPopup, DataService, ClassDaysFactory, StorageService, PhoneNumberFactory, RegistrationFactory) {
+.controller('RegisterCtrl', function($scope, $state, $filter, LoadingFactory, $ionicPopup, DataService, StorageService, PhoneNumberFactory, RegistrationFactory) {
 
   $scope.formData = {};
   $scope.periodLetters = ['a','b','c','d','e','f','g'];
 
   /**
-   * Uncheck radio button of alternate day number
-   * Ugly function to compensate for radio button arrays not 
-   * removing value after it is deselected
-   * @param  {object} $event Contains element id and other information
+   * Deselect currently selected day in alternate class
+   * @param  {integer} dayNumber    Number of the selected day
+   * @param  {string}  periodLetter Letter of the current period
+   * @param  {boolean} alternate    (Optional) Either 'alternate' or not provided
    */
-  $scope.deselectDays = function ($event) {
-    // ID of element, ex: formData.a.days[1]
-    var id = $event.srcElement.id;
-    var idPieces = id.split('.');
-    var periodLetter = idPieces[1];
+  $scope.deselectDays = function (dayNumber, periodLetter, alternate) {
 
-    // Boolean, true if current element is from the alternate class
-    var alternate = _.contains(idPieces, "alternate");
+    // Primary day:
+    // 1. Remove day number from alternate days array
+    // 2. Add day number to primary days array
+    if (!alternate) {
+      delete $scope.formData[periodLetter].alternate.days[dayNumber - 1];
+      $scope.formData[periodLetter].days[dayNumber - 1] = dayNumber;
 
-    if (alternate) {
-      var dayNumber = parseInt(idPieces[3].match(/\[(.*?)\]/)[1]);
-
-      // Deselect the primary class
-      $scope.formData[periodLetter].days[dayNumber] = null;
-
+    // Alternate day:
+    // 1. Remove day number from primary days array
+    // 2. Add day number to alternate days array
     } else {
-      var dayNumber = parseInt(idPieces[2].match(/\[(.*?)\]/)[1]);
-
-      // Deselect the alternate class
-      $scope.formData[periodLetter].alternate.days[dayNumber] = null;
+      delete $scope.formData[periodLetter].days[dayNumber - 1];
+      $scope.formData[periodLetter].alternate.days[dayNumber - 1] = dayNumber;
     }
+
   };
 
   // @TODO: switch to $watch
@@ -152,14 +153,6 @@ angular.module('schedu.controllers', [])
 
     LoadingFactory.show();
 
-    ///////////////////////
-    // PROCESS FORM DATA //
-    ///////////////////////
-
-    // Parse alternating class days
-    formData = ClassDaysFactory.make(formData);
-
-    // Capitalize class names, add feedback and usage
     formData = RegistrationFactory.process(formData);
 
     ////////////////////////////////////////////////

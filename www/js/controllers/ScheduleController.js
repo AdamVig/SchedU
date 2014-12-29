@@ -1,4 +1,4 @@
-controllers.controller('ScheduleCtrl', function($scope, $rootScope, $state, $q, LoadingFactory, DataService, StorageService, ClassOrderFactory, DateFactory, UsageFactory, SyncUserFactory) {
+controllers.controller('ScheduleController', function($scope, $rootScope, $state, $q, LoadingFactory, DataService, StorageService, ClassOrderFactory, DateFactory, UsageFactory, SyncUserFactory) {
 
   LoadingFactory.show();
   $scope.testingNetwork = false;

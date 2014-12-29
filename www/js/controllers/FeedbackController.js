@@ -1,4 +1,4 @@
-controllers.controller('FeedbackCtrl', function($scope, $state, $ionicPopup, LoadingFactory, DataService, StorageService) {
+controllers.controller('FeedbackController', function($scope, $state, $ionicPopup, LoadingFactory, DataService, StorageService) {
 
   LoadingFactory.show();
 

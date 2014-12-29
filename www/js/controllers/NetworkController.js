@@ -1,4 +1,4 @@
-controllers.controller('NetworkCtrl', function ($scope, $state, $timeout, LoadingFactory) {
+controllers.controller('NetworkController', function ($scope, $state, $timeout, LoadingFactory) {
 
   $scope.testNetwork = function () {
 

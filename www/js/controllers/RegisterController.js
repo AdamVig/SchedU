@@ -1,4 +1,4 @@
-controllers.controller('RegisterCtrl', function($scope, $state, $filter, LoadingFactory, $ionicPopup, DataService, StorageService, PhoneNumberFactory, RegistrationFactory) {
+controllers.controller('RegisterController', function($scope, $state, $filter, LoadingFactory, $ionicPopup, DataService, StorageService, PhoneNumberFactory, RegistrationFactory) {
 
   $scope.formData = {};
   $scope.periodLetters = ['a','b','c','d','e','f','g'];

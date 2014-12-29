@@ -9,7 +9,7 @@
           novalidate
           name="loginForm"
           ng-submit="login(loginForm.phoneNumber, loginForm)"
-          ng-controller="LoginCtrl">
+          ng-controller="LoginController">
       <div class="error login-error" ng-show="submittedInvalid">
         Doesn't look like a phone number... Try again! <span class="tel-example">Like this: 123-456-7890</span>.
       </div>

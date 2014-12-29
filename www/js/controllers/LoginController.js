@@ -1,4 +1,4 @@
-controllers.controller('LoginCtrl', function($scope, $state, $ionicLoading, LoadingFactory, DataService, StorageService, PhoneNumberFactory, UsageFactory) {
+controllers.controller('LoginController', function($scope, $state, $ionicLoading, LoadingFactory, DataService, StorageService, PhoneNumberFactory, UsageFactory) {
 
   $scope.submittedInvalid = false;
   $scope.submittedValid = false;

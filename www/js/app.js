@@ -12,13 +12,13 @@ schedu.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     .state('schedule', {
       url: '/schedule',
       templateUrl: 'templates/schedule.html',
-      controller: 'ScheduleCtrl'
+      controller: 'ScheduleController'
     })
 
     .state('feedback', {
       url: '/feedback',
       templateUrl: 'templates/feedback.html',
-      controller: 'FeedbackCtrl'
+      controller: 'FeedbackController'
     })
 
     .state('login', {
@@ -34,7 +34,7 @@ schedu.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     .state('register-new', {
       url: '/register-new',
       templateUrl: 'templates/register-new.html',
-      controller: 'RegisterCtrl'
+      controller: 'RegisterController'
     });
 
   $urlRouterProvider.otherwise('/schedule');

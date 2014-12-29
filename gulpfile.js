@@ -1,17 +1,30 @@
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var bower = require('bower');
-var concat = require('gulp-concat');
-var sass = require('gulp-sass');
-var minifyCss = require('gulp-minify-css');
-var rename = require('gulp-rename');
-var sh = require('shelljs');
+var gulp = require('gulp'),
+    gutil = require('gulp-util'),
+    bower = require('bower'),
+    concat = require('gulp-concat'),
+    sass = require('gulp-sass'),
+    minifyCss = require('gulp-minify-css'),
+    rename = require('gulp-rename'),
+    inject = require('gulp-inject'),
+    series = require('stream-series'),
+    order = require('gulp-order'),
+    sh = require('shelljs');
 
 var paths = {
   sass: ['./scss/**/*.scss']
 };
 
-gulp.task('default', ['sass']);
+gulp.task('default', ['sass', 'inject-js']);
+
+gulp.task('inject-js', function () {
+  var libSources = gulp.src(['www/lib/js/*.js'], {read: false});
+  var mainSources = gulp.src(['www/js/**/*.js'], {read: false})
+    .pipe(order(['app.js', '*.js', '**/*.js']));
+
+  return gulp.src('./www/index.html')
+    .pipe(inject(series(libSources, mainSources), {ignorePath: 'www'}))
+    .pipe(gulp.dest('./www'));
+});
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/app.scss')

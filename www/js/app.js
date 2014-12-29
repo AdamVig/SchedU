@@ -1,6 +1,11 @@
-angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers', 'schedu.constants', 'schedu.filters'])
+var schedu = angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers', 'schedu.constants', 'schedu.filters', 'schedu.directives']);
+var controllers = angular.module('schedu.controllers', []);
+var services = angular.module('schedu.services', []);
+var constants = angular.module('schedu.constants', []);
+var filters = angular.module('schedu.filters', []);
+var directives = angular.module('schedu.directives', []);
 
-.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+schedu.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
   $stateProvider
 
@@ -34,9 +39,9 @@ angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers', 'sch
 
   $urlRouterProvider.otherwise('/schedule');
 
-})
+});
 
-.run(function($window, $rootScope) {
+schedu.run(function($window, $rootScope) {
 
   /**
    * Check if device has internet connection
@@ -47,7 +52,7 @@ angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers', 'sch
 
     var online;
     var img = new Image();
-    
+
     img.onload = function () {
       $rootScope.online = true;
     };
@@ -62,4 +67,3 @@ angular.module('schedu', ['ionic', 'schedu.services', 'schedu.controllers', 'sch
   $rootScope.checkOnLine();
 
 });
-

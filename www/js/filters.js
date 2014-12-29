@@ -1,29 +1,9 @@
-angular.module('schedu.filters', [])
- 
-.directive('period', function ($compile) {
-  return {
-    restrict: 'E',
-    templateUrl: 'templates/period.html',
-    scope: {
-      letter: "="
-    },
-    link: function (scope, elem, attrs) {
+filters.filter('sentencecase', function () {
 
-      // Replace %% character with current period letter
-      elem.html(elem[0].innerHTML.replace("ltr", scope.letter));
-
-      // Compile template
-      $compile(elem.contents())(scope);
-    }
-  }
-})
-
-.filter('sentencecase', function () {
-  
   return function (sentence) {
     var sentenceWords = sentence.split(" ");
     var capitalizedSentence = "";
-    
+
     _.each(sentenceWords, function (word, wordNum) {
 
       capitalizedSentence += word.substring(0,1).toUpperCase();
@@ -50,9 +30,9 @@ angular.module('schedu.filters', [])
 })
 
 .filter('phonenumber', function () {
-      
+
   return function (number) {
-    /* 
+    /*
     @param {Number | String} number - Number that will be formatted as telephone number
     Returns formatted number: (###) ###-####
       if number.length < 4: ###
@@ -68,7 +48,7 @@ angular.module('schedu.filters', [])
     var end = number.substring(6, 10);
 
     if (front) {
-      formattedNumber = area + "-" + front;  
+      formattedNumber = area + "-" + front;
     }
     if (end) {
       formattedNumber += "-" + end;

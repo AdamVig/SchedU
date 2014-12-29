@@ -12,7 +12,7 @@ angular.module('schedu.controllers', [])
     $state.go("login");
     LoadingFactory.hide();
   };
-  
+
   // Get user data object or "undefined"
   var localUser = StorageService.getUser();
 
@@ -27,7 +27,7 @@ angular.module('schedu.controllers', [])
 
     var dateString = date.format('MM-DD-YY');
     $scope.formattedDate = DateFactory.formatDate(date);
-    
+
     // Get schedule, parse into A1 format, then make class order
     DataService.getSchedule(dateString).then(function (response) {
 
@@ -78,14 +78,14 @@ angular.module('schedu.controllers', [])
       }
 
     });
-    
+
   // No data in local storage, redirect to login page
   } else {
 
     $state.go("login");
     LoadingFactory.hide();
     $scope.noUserFound = true;
-    
+
   }
 
 })
@@ -144,10 +144,9 @@ angular.module('schedu.controllers', [])
 
   };
 
-  // @TODO: switch to $watch
-  $scope.processPhoneNumber = function (phoneNumber) {
+  $scope.$watch("formData.phoneNumber", function(phoneNumber){
     $scope.formData.phoneNumber = PhoneNumberFactory.parse(phoneNumber);
-  };
+  });
 
   $scope.register = function (formData) {
 
@@ -158,15 +157,15 @@ angular.module('schedu.controllers', [])
     ////////////////////////////////////////////////
     // ADD USER TO DATABASE, STORE, SHOW SCHEDULE //
     ////////////////////////////////////////////////
-    
+
     DataService.createUser(formData).then(function (response) {
 
       // Conflict, user already exists
       if (response.error.status == 409) {
-        
+
         LoadingFactory.hide();
         $ionicPopup.show({
-          template: 'A user already exists with this phone number. ' + 
+          template: 'A user already exists with this phone number. ' +
                 'Is it you? You can either change your phone ' +
                 'number or login using this phone number.',
           title: 'Oh no!',
@@ -199,9 +198,9 @@ angular.module('schedu.controllers', [])
 
       // No errors
       } else {
-        
+
         DataService.getUser(formData.phoneNumber).then(function (response) {
-          
+
           if (!response.error) {
             StorageService.storeUser(response.data);
             LoadingFactory.hide();
@@ -220,7 +219,7 @@ angular.module('schedu.controllers', [])
               $state.go("register");
             })
           }
-        });        
+        });
       }
 
     });
@@ -233,14 +232,9 @@ angular.module('schedu.controllers', [])
   $scope.submittedInvalid = false;
   $scope.submittedValid = false;
 
-  $scope.processPhoneNumber = function (phoneNumber) {
+  $scope.$watch("loginForm.phoneNumber", function(phoneNumber){
     $scope.loginForm.phoneNumber = PhoneNumberFactory.parse(phoneNumber);
-  }
-
-  // @TODO: switch from ng-change to $watch on phone number fields
-  /*$scope.$watch("myModel", function(newValue, oldValue){
-      // do something
-  }); */
+  });
 
   $scope.login = function (phoneNumber, loginForm) {
 
@@ -308,7 +302,7 @@ angular.module('schedu.controllers', [])
 
   // Get number of votes from user
   $scope.feedback = localUser.feedback;
-  
+
   // Retrieve feedback items list from database, hide loader
   DataService.getFeedbackItems().then(function (response) {
     $scope.feedbackItems = response.data;

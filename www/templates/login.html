@@ -24,9 +24,9 @@
       </div>
       <label class="item item-input">
         <span class="input-label">Phone Number</span>
-        <input type="tel" required ng-model="loginForm.phoneNumber" placeholder="555-555-5555" ng-change="processPhoneNumber(loginForm.phoneNumber)">
+        <input type="tel" required ng-model="loginForm.phoneNumber" placeholder="555-555-5555">
       </label>
-      <button type="submit" 
+      <button type="submit"
               class="item button button-schedu button-block login-button"
               ng-disabled="loginForm.phoneNumber.length < 12">
         Sign In

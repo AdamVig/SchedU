@@ -2,13 +2,13 @@ services.factory('LoadingFactory', function ($ionicLoading) {
   return {
     show: function () {
       $ionicLoading.show({
-        templateUrl: 'templates/loader.html',
+        templateUrl: 'html/_loader.html',
         noBackdrop: false
       });
     },
     showNoConnection: function () {
       $ionicLoading.show({
-        templateUrl: 'templates/noconnection.html',
+        templateUrl: 'html/_noconnection.html',
         noBackdrop: false
       });
     },

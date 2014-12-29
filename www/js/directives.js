@@ -1,7 +1,7 @@
 directives.directive('period', function ($compile) {
   return {
     restrict: 'E',
-    templateUrl: 'templates/period.html',
+    templateUrl: 'html/_period.html',
     scope: {
       letter: "="
     },

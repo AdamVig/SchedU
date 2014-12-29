@@ -1,5 +1,5 @@
 {
   "name": "SchedU",
   "app_id": "",
-  "gulpStartupTasks": ["sass", "watch"]
+  "gulpStartupTasks": ["default", "watch"]
 }

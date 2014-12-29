@@ -104,7 +104,7 @@ angular.module('schedu.services', [])
 
     // Write user data to database
     userDb.put(userData, userData.phoneNumber, function (error, data) {
-      
+
       if (error == null) {
         error = false;
       }
@@ -118,7 +118,7 @@ angular.module('schedu.services', [])
 
   /**
    * Update user
-   * @param  {user object} userData User object containing _id, _rev, first name, 
+   * @param  {user object} userData User object containing _id, _rev, first name,
    *                                last name, phone number, classes, phone number
    * @return {response object}      Response object containing error (string or false)
    *                                and response (string or false)
@@ -129,7 +129,7 @@ angular.module('schedu.services', [])
 
     // Write user data to database
     userDb.put(userData, userData._id, userData._rev, function (error, data) {
-      
+
       if (error == null) {
         error = false;
       }
@@ -142,6 +142,7 @@ angular.module('schedu.services', [])
   };
 
 })
+
 
 .service('StorageService', function() {
 
@@ -218,7 +219,7 @@ angular.module('schedu.services', [])
       }).then(function (response) {
 
         request.resolve(response);
-      
+
       });
 
       return request.promise;
@@ -235,7 +236,7 @@ angular.module('schedu.services', [])
    * @param  {object} primaryClass   Contains name and list of days
    * @param  {object} alternateClass Contains name and list of days
    * @param  {integer} dayNum        Number of day, 1-8
-   * @return {object}                primaryClass, alternateClass, or 
+   * @return {object}                primaryClass, alternateClass, or
    *                                 {'name': "Study"}
    */
   function decideWhichClass(primaryClass, alternateClass, dayNum) {
@@ -260,9 +261,9 @@ angular.module('schedu.services', [])
 
 
   return {
-    
+
     /**
-     * Parses schedule object into A1 notation using the first period from 
+     * Parses schedule object into A1 notation using the first period from
      * periodOrder and the day number. False if first period is more than one
      * letter long or if period order doesn't exist.
      * @param  {object} scheduleObject Schedule object containing periodOrder,
@@ -318,7 +319,7 @@ angular.module('schedu.services', [])
           if (currentPeriod.length == 1) {
 
             currentClass = userData[currentPeriod];
-            
+
             // Class doesn't alternate
             if (!currentClass.alternate) {
 
@@ -351,7 +352,7 @@ angular.module('schedu.services', [])
 
         });
       } // End else normal day
-      
+
       return classOrder;
     }
   }
@@ -368,7 +369,7 @@ angular.module('schedu.services', [])
  *                                       each feedback item object contains _id, name, and votes
  */
 .factory('FeedbackItemsFactory', function () {
-  
+
   return {
     make: function (feedbackItemsDatabase) {
       var feedbackItems = {};
@@ -410,7 +411,7 @@ angular.module('schedu.services', [])
   return {
 
     /**
-     * Gets today's date if not weekend, next 
+     * Gets today's date if not weekend, next
      * Monday's date if weekend; tomorrow's date if after
      * dismissal time
      * @return {moment object} Moment() of the current school
@@ -418,9 +419,9 @@ angular.module('schedu.services', [])
      */
     currentDay: function () {
 
-      currentDay = moment().hour(14).minute(20).second(0);
+      currentDay = moment();
 
-      currentDay = skipWeekend(currentDay); 
+      currentDay = skipWeekend(currentDay);
 
       if (currentDay.isAfter(dismissal)) {
         currentDay.add(1, 'days');
@@ -457,7 +458,7 @@ angular.module('schedu.services', [])
      * Format date into weekday and full date format,
      * ex: todaysDate = September 27; dayOfWeek = Wednesday
      * @param  {string} date Date in format MM-DD-YY
-     * @return {object}      Object containing todaysDate and 
+     * @return {object}      Object containing todaysDate and
      *                       dayOfWeek as strings
      */
     formatDate: function (date) {
@@ -486,13 +487,13 @@ angular.module('schedu.services', [])
 
           // Capitalize primary class name
           userData[periodLetter].name = $filter('sentencecase')(userData[periodLetter].name);
-          
+
           // Class has an alternate
           if (userData[periodLetter].alternate.name) {
 
             // Capitalize alternate class name
             userData[periodLetter].alternate.name = $filter('sentencecase')(userData[periodLetter].alternate.name);
-          
+
             // Remove empty values from days arrays
             userData[periodLetter].days = _.compact(userData[periodLetter].days);
             userData[periodLetter].alternate.days = _.compact(userData[periodLetter].alternate.days);

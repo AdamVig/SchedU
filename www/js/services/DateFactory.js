@@ -32,11 +32,11 @@ services.factory('DateFactory', function (dismissal) {
 
       currentDay = moment();
 
-      currentDay = skipWeekend(currentDay);
-
       if (currentDay.isAfter(dismissal)) {
         currentDay.add(1, 'days');
       }
+
+      currentDay = skipWeekend(currentDay);
 
       return currentDay;
     },

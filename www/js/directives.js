@@ -6,12 +6,7 @@ directives.directive('period', function ($compile) {
       letter: "="
     },
     link: function (scope, elem, attrs) {
-
-      // Replace %% character with current period letter
-      elem.html(elem[0].innerHTML.replace("ltr", scope.letter));
-
-      // Compile template
-      $compile(elem.contents())(scope);
+ 
     }
   }
 });

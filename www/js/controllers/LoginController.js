@@ -1,4 +1,4 @@
-controllers.controller('LoginController', function($scope, $state, $ionicLoading, LoadingFactory, DataService, StorageService, PhoneNumberFactory, UsageFactory) {
+controllers.controller('LoginController', function($scope, $state, $ionicLoading, LoadingFactory, DataService, DatabaseFactory, StorageService, PhoneNumberFactory, UsageFactory) {
 
   $scope.submittedInvalid = false;
   $scope.submittedValid = false;
@@ -22,38 +22,30 @@ controllers.controller('LoginController', function($scope, $state, $ionicLoading
       $scope.submittedValid = true;
 
       // Get user data by phone number ID
-      DataService.getUser(phoneNumber).then(function (response) {
+      DatabaseFactory.user.get(phoneNumber).then(function (response) {
 
         LoadingFactory.hide();
+        StorageService.storeUser(response.data);
+        $state.go("schedule");
 
-        // Successful retrieval of user data
-        if (!response.error) {
+      }).catch(function (e) {
 
-          StorageService.storeUser(response.data);
-          $state.go("schedule");
-
-          // Show "not found" error message
-        } else if (response.error.status == 404) {
+        if (e.status == 404) {
 
           $scope.noUserFound = true;
-
-          // Show offline error message
         } else if (!$scope.online) {
 
           $scope.noNetwork = true;
-
-          // Show general error message
         } else {
 
           $scope.unknownError = true;
         }
+        LoadingFactory.hide();
       });
 
     } else {
       LoadingFactory.hide();
       $scope.submittedInvalid = true;
     }
-
   };
-
 });

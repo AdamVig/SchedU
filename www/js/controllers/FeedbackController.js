@@ -1,4 +1,4 @@
-controllers.controller('FeedbackController', function($scope, $state, $ionicPopup, LoadingFactory, DataService, StorageService) {
+controllers.controller('FeedbackController', function($scope, $state, $ionicPopup, LoadingFactory, DatabaseFactory, DataService, StorageService) {
 
   LoadingFactory.show();
 
@@ -15,8 +15,8 @@ controllers.controller('FeedbackController', function($scope, $state, $ionicPopu
   $scope.feedback = localUser.feedback;
 
   // Retrieve feedback items list from database, hide loader
-  DataService.getFeedbackItems().then(function (response) {
-    $scope.feedbackItems = response.data;
+  DatabaseFactory.feedback.getAll().then(function (response) {
+    $scope.feedbackItems = DataService.extractDocs(response);
     LoadingFactory.hide();
   });
 
@@ -75,8 +75,20 @@ controllers.controller('FeedbackController', function($scope, $state, $ionicPopu
     LoadingFactory.show();
 
     localUser.feedback = $scope.feedback;
-    DataService.syncUser(localUser).then(function (response) {
-      localUser = response.data;
+    DatabaseFactory.user.get(localUser._id).then(function (response) {
+
+      if (response.data._rev != localUser._rev) {
+
+        localUser = response.data;
+        localUser.feedback = $scope.feedback;
+      }
+
+      return DatabaseFactory.user.insert(localUser);
+      
+    }).then(function (response) {
+
+      localUser._rev = response.data.rev;
+      StorageService.storeUser(localUser);
       LoadingFactory.hide();
     });
   };

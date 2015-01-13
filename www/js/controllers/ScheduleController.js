@@ -1,4 +1,4 @@
-controllers.controller('ScheduleController', function($scope, $rootScope, $state, $q, LoadingFactory, DataService, StorageService, ClassOrderFactory, DateFactory, UsageFactory, SyncUserFactory) {
+controllers.controller('ScheduleController', function($scope, $rootScope, $state, $q, LoadingFactory, DataService, DatabaseFactory, StorageService, ClassOrderFactory, DateFactory, UsageFactory) {
 
   LoadingFactory.show();
   $scope.testingNetwork = false;
@@ -14,7 +14,50 @@ controllers.controller('ScheduleController', function($scope, $rootScope, $state
   // Get user data object or "undefined"
   var localUser = StorageService.getUser();
 
-  if (localUser) {
+  // No local user, redirect to login page
+  if (!localUser) {
+
+    $state.go("login");
+    LoadingFactory.hide();
+    $scope.noUserFound = true;
+
+  // Local user exists
+  } else {
+
+    ///////////////////
+    // RETRIEVE USER //
+    ///////////////////
+    DatabaseFactory.user.get(localUser._id).then(function (response) {
+
+      if (response.data._rev != localUser._rev) {
+
+        localUser = response.data;
+        StorageService.storeUser(localUser);
+      }
+
+    //////////////////////////
+    // SYNC USER USAGE DATA //
+    //////////////////////////
+
+      localUser.usage = UsageFactory.get(localUser.usage);
+
+      return DatabaseFactory.user.insert(localUser);
+
+    }).catch(function (e) {
+
+      if (e.status == 404) {
+
+        $q.reject();
+        $state.go("login");
+        LoadingFactory.hide();
+        $scope.noUserFound = true;
+      }
+    }).then(function (response) {
+
+      localUser._rev = response.data.rev;
+      StorageService.storeUser(localUser);
+
+    });
 
     ///////////////////////
     // RETRIEVE SCHEDULE //
@@ -27,63 +70,39 @@ controllers.controller('ScheduleController', function($scope, $rootScope, $state
     $scope.formattedDate = DateFactory.formatDate(date);
 
     // Get schedule, parse into A1 format, then make class order
-    DataService.getSchedule(dateString).then(function (response) {
+    DatabaseFactory.schedule.get(dateString).then(function (response) {
 
-      if (!response.error) {
+      // Parse schedule object into A1 format
+      $scope.scheduleString = ClassOrderFactory.makeScheduleString(response.data);
 
-        // Parse schedule object into A1 format
-        $scope.scheduleString = ClassOrderFactory.makeScheduleString(response.data);
+      // Make class order, hide loader
+      $scope.classOrder = ClassOrderFactory.make(localUser, response.data);
 
-        // Make class order, hide loader
-        $scope.classOrder = ClassOrderFactory.make(localUser, response.data);
+      LoadingFactory.hide();
 
-        LoadingFactory.hide();
-
-        // Update usage
-        localUser.usage = UsageFactory.get(localUser.usage);
-
-        return SyncUserFactory.sync(localUser);
-
-      } else if (!$scope.online) {
+    }).catch(function (e) {
+      if (!$scope.online) {
 
         LoadingFactory.quickHide();
         LoadingFactory.showNoConnection();
 
-        return $q.reject("No network connection.");
-
       } else {
 
         LoadingFactory.hide();
-        return $q.reject("Unknown error.");
+        $ionicPopup.show({
+          template: 'Something went wrong. Contact ' +
+          'info@getschedu.com if this keeps happening.',
+          title: 'Sorry!',
+          scope: $scope,
+          buttons: [
+            {text: 'Try again'}
+          ]
+        }).then(function () {
+          LoadingFactory.hide();
+          $state.go("login");
+        });
       }
-
-      //////////////////////////
-      // SYNC USER USAGE DATA //
-      //////////////////////////
-
-    }).then(function (response) {
-
-      // Successful sync; store user
-      if (!response.error) {
-        localUser = response.data;
-        StorageService.storeUser(response.data);
-
-        // User doesn't exist in database
-      } else if (response.error.status == 404) {
-        $state.go("login");
-        LoadingFactory.hide();
-        $scope.noUserFound = true;
-      }
-
     });
-
-    // No data in local storage, redirect to login page
-  } else {
-
-    $state.go("login");
-    LoadingFactory.hide();
-    $scope.noUserFound = true;
-
   }
 
 });

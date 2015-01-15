@@ -1,7 +1,7 @@
 <ion-view>
   <ion-header-bar>
     <div class="buttons">
-      <button class="button button-clear back-arrow reverse" ng-click="logout()">
+      <button class="button button-clear back-arrow reverse" ng-click="schedule.logout()">
         <i class="ion-arrow-left-c"></i>
       </button>
     </div>
@@ -14,15 +14,15 @@
   </ion-header-bar>
   <ion-content has-header="true">
     <ion-list class="class-list">
-      <div class="list-page-heading item text-center date-header" ng-click="dateShow = !dateShow">
-        <h3 ng-show="dateShow">{{formattedDate.todaysDate}}</h3>
-        <h3 ng-hide="dateShow">
-          {{formattedDate.dayOfWeek}}
-          <span ng-show="scheduleString"> - Day {{scheduleString}}</span>
+      <div class="list-page-heading item text-center date-header" ng-click="schedule.dateShow = !schedule.dateShow">
+        <h3 ng-show="schedule.dateShow">{{schedule.formattedDate.todaysDate}}</h3>
+        <h3 ng-hide="schedule.dateShow">
+          {{schedule.formattedDate.dayOfWeek}}
+          <span ng-show="schedule.scheduleString"> - Day {{schedule.scheduleString}}</span>
         </h3>
       </div>
       <ion-item class="schedule-item"
-                ng-repeat="class in classOrder">
+                ng-repeat="class in schedule.classOrder">
 
         <div class="period-block {{class.letter | lowercase}}-period">
             {{class.letter}}

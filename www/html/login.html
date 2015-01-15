@@ -7,28 +7,28 @@
     </div>
     <form class="list list-inset login-container"
           novalidate
-          name="loginForm"
-          ng-submit="login(loginForm.phoneNumber, loginForm)"
-          ng-controller="LoginController">
-      <div class="error login-error" ng-show="submittedInvalid">
+          name="login.loginForm"
+          ng-submit="login.loginUser(login.loginForm.phoneNumber, login.loginForm)"
+          ng-controller="LoginController as login">
+      <div class="error login-error" ng-show="login.submittedInvalid">
         Doesn't look like a phone number... Try again! <span class="tel-example">Like this: 123-456-7890</span>.
       </div>
-      <div class="error login-error" ng-show="noUserFound && submittedValid">
+      <div class="error login-error" ng-show="login.noUserFound && login.submittedValid">
         I couldn't find your information. Have you signed up?
       </div>
-      <div class="error login-error" ng-show="noNetwork && submittedValid">
+      <div class="error login-error" ng-show="login.noNetwork && login.submittedValid">
         It doesn't look like you have a network connection. Please try again.
       </div>
-      <div class="error login-error" ng-show="unknownError && submittedValid">
+      <div class="error login-error" ng-show="login.unknownError && login.submittedValid">
         Sorry, something went wrong. Please try again later.
       </div>
       <label class="item item-input">
         <span class="input-label">Phone Number</span>
-        <input type="tel" required ng-model="loginForm.phoneNumber" placeholder="555-555-5555">
+        <input type="tel" required ng-model="login.loginForm.phoneNumber" placeholder="555-555-5555">
       </label>
       <button type="submit"
               class="item button button-schedu button-block login-button"
-              ng-disabled="loginForm.phoneNumber.length < 12">
+              ng-disabled="login.loginForm.phoneNumber.length < 12">
         Sign In
       </button>
       <center class="register-description">Not a member yet?</center>

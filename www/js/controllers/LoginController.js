@@ -1,25 +1,28 @@
 controllers.controller('LoginController', function($scope, $state, $ionicLoading, LoadingFactory, DataService, DatabaseFactory, StorageService, PhoneNumberFactory, UsageFactory) {
 
-  $scope.submittedInvalid = false;
-  $scope.submittedValid = false;
+  var login = this;
+  login.submittedInvalid = false;
+  login.submittedValid = false;
 
-  $scope.$watch("loginForm.phoneNumber", function(phoneNumber){
-    $scope.loginForm.phoneNumber = PhoneNumberFactory.parse(phoneNumber);
+  $scope.$watch(angular.bind(login, function () {
+    return login.loginForm.phoneNumber;
+  }), function(phoneNumber){
+    login.loginForm.phoneNumber = PhoneNumberFactory.parse(phoneNumber);
   });
 
-  $scope.login = function (phoneNumber, loginForm) {
+  login.loginUser = function (phoneNumber, loginForm) {
 
     // Reset errors
-    $scope.submittedInvalid = false;
-    $scope.submittedValid = false;
-    $scope.noUserFound = false;
-    $scope.unknownError = false;
+    login.submittedInvalid = false;
+    login.submittedValid = false;
+    login.noUserFound = false;
+    login.unknownError = false;
 
     LoadingFactory.show();
 
     if (loginForm.$valid) {
 
-      $scope.submittedValid = true;
+      login.submittedValid = true;
 
       // Get user data by phone number ID
       DatabaseFactory.user.get(phoneNumber).then(function (response) {
@@ -32,20 +35,20 @@ controllers.controller('LoginController', function($scope, $state, $ionicLoading
 
         if (e.status == 404) {
 
-          $scope.noUserFound = true;
-        } else if (!$scope.online) {
+          login.noUserFound = true;
+        } else if (!login.online) {
 
-          $scope.noNetwork = true;
+          login.noNetwork = true;
         } else {
 
-          $scope.unknownError = true;
+          login.unknownError = true;
         }
         LoadingFactory.hide();
       });
 
     } else {
       LoadingFactory.hide();
-      $scope.submittedInvalid = true;
+      login.submittedInvalid = true;
     }
   };
 });

@@ -1,10 +1,11 @@
-controllers.controller('ScheduleController', function($scope, $rootScope, $state, $q, $ionicPopup, LoadingFactory, DataService, DatabaseFactory, StorageService, ClassOrderFactory, DateFactory, UsageFactory) {
+controllers.controller('ScheduleController', function($state, $q, $ionicPopup, LoadingFactory, DataService, DatabaseFactory, StorageService, ClassOrderFactory, DateFactory, UsageFactory) {
 
+  var schedule = this;
   LoadingFactory.show();
-  $scope.testingNetwork = false;
-  $scope.dateShow = false;
+  schedule.testingNetwork = false;
+  schedule.dateShow = false;
 
-  $scope.logout = function () {
+  schedule.logout = function () {
     LoadingFactory.show();
     StorageService.deleteUser();
     $state.go("login");
@@ -19,14 +20,11 @@ controllers.controller('ScheduleController', function($scope, $rootScope, $state
 
     $state.go("login");
     LoadingFactory.hide();
-    $scope.noUserFound = true;
+    schedule.noUserFound = true;
 
   // Local user exists
   } else {
 
-    ///////////////////
-    // RETRIEVE USER //
-    ///////////////////
     DatabaseFactory.user.get(localUser._id).then(function (response) {
 
       if (response.data._rev != localUser._rev) {
@@ -34,10 +32,6 @@ controllers.controller('ScheduleController', function($scope, $rootScope, $state
         localUser = response.data;
         StorageService.storeUser(localUser);
       }
-
-    //////////////////////////
-    // SYNC USER USAGE DATA //
-    //////////////////////////
 
       localUser.usage = UsageFactory.get(localUser.usage);
 
@@ -50,7 +44,7 @@ controllers.controller('ScheduleController', function($scope, $rootScope, $state
         $q.reject();
         $state.go("login");
         LoadingFactory.hide();
-        $scope.noUserFound = true;
+        schedule.noUserFound = true;
       }
     }).then(function (response) {
 
@@ -59,29 +53,23 @@ controllers.controller('ScheduleController', function($scope, $rootScope, $state
 
     });
 
-    ///////////////////////
-    // RETRIEVE SCHEDULE //
-    ///////////////////////
-
-    // Create and format date
     var date = DateFactory.currentDay();
-
     var dateString = date.format('MM-DD-YY');
-    $scope.formattedDate = DateFactory.formatDate(date);
+    schedule.formattedDate = DateFactory.formatDate(date);
 
     // Get schedule, parse into A1 format, then make class order
     DatabaseFactory.schedule.get(dateString).then(function (response) {
 
       // Parse schedule object into A1 format
-      $scope.scheduleString = ClassOrderFactory.makeScheduleString(response.data);
+      schedule.scheduleString = ClassOrderFactory.makeScheduleString(response.data);
 
       // Make class order, hide loader
-      $scope.classOrder = ClassOrderFactory.make(localUser, response.data);
+      schedule.classOrder = ClassOrderFactory.make(localUser, response.data);
 
       LoadingFactory.hide();
 
     }).catch(function (e) {
-      if (!$scope.online) {
+      if (!schedule.online) {
 
         LoadingFactory.quickHide();
         LoadingFactory.showNoConnection();
@@ -93,7 +81,7 @@ controllers.controller('ScheduleController', function($scope, $rootScope, $state
           template: 'Something went wrong. Contact ' +
           'info@getschedu.com if this keeps happening.',
           title: 'Sorry!',
-          scope: $scope,
+          scope: schedule,
           buttons: [
             {text: 'Try again'}
           ]

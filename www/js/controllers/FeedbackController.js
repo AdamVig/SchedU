@@ -1,5 +1,6 @@
 controllers.controller('FeedbackController', function($scope, $state, $ionicPopup, LoadingFactory, DatabaseFactory, DataService, StorageService) {
 
+  var feedback = this;
   LoadingFactory.show();
 
   // Get user data object (false if not available)
@@ -12,16 +13,16 @@ controllers.controller('FeedbackController', function($scope, $state, $ionicPopu
   }
 
   // Get number of votes from user
-  $scope.feedback = localUser.feedback;
+  feedback.userFeedback = localUser.feedback;
 
   // Retrieve feedback items list from database, hide loader
   DatabaseFactory.feedback.getAll().then(function (response) {
-    $scope.feedbackItems = DataService.extractDocs(response);
+    feedback.feedbackItems = DataService.extractDocs(response);
     LoadingFactory.hide();
   });
 
   // Show informational popup if no votes
-  if ($scope.feedback.voteItems.length == 0) {
+  if (feedback.userFeedback.voteItems.length == 0) {
     $ionicPopup.alert({
       title: 'SchedU needs your help!',
       template: "On this page, please select the features you would like to see in SchedU. " +
@@ -33,18 +34,18 @@ controllers.controller('FeedbackController', function($scope, $state, $ionicPopu
   * Toggle vote status on a given item
   * @param  {Integer} index Index of tapped item in feedback list
   */
-  $scope.voteOnItem = function (itemId) {
+  feedback.voteOnItem = function (itemId) {
 
-    var itemIsSelected = _.contains($scope.feedback.voteItems, itemId);
+    var itemIsSelected = _.contains(feedback.userFeedback.voteItems, itemId);
 
     // If not selected, add to list of selected items
-    if ($scope.feedback.votes > 0 && !itemIsSelected) {
+    if (feedback.userFeedback.votes > 0 && !itemIsSelected) {
 
       // Add item to voteItems list
-      $scope.feedback.voteItems.push(itemId);
+      feedback.userFeedback.voteItems.push(itemId);
 
       // Decrement number of votes left
-      $scope.feedback.votes--;
+      feedback.userFeedback.votes--;
 
       syncVotes();
 
@@ -52,10 +53,10 @@ controllers.controller('FeedbackController', function($scope, $state, $ionicPopu
     } else if (itemIsSelected) {
 
       // Remove item from voteItems list
-      $scope.feedback.voteItems = _.without($scope.feedback.voteItems, itemId);
+      feedback.userFeedback.voteItems = _.without(feedback.userFeedback.voteItems, itemId);
 
       // Add a vote back
-      $scope.feedback.votes++;
+      feedback.userFeedback.votes++;
 
       syncVotes();
 
@@ -74,17 +75,17 @@ controllers.controller('FeedbackController', function($scope, $state, $ionicPopu
 
     LoadingFactory.show();
 
-    localUser.feedback = $scope.feedback;
+    localUser.feedback = feedback.userFeedback;
     DatabaseFactory.user.get(localUser._id).then(function (response) {
 
       if (response.data._rev != localUser._rev) {
 
         localUser = response.data;
-        localUser.feedback = $scope.feedback;
+        localUser.feedback = feedback.userFeedback;
       }
 
       return DatabaseFactory.user.insert(localUser);
-      
+
     }).then(function (response) {
 
       localUser._rev = response.data.rev;

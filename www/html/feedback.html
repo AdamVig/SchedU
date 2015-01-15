@@ -17,19 +17,19 @@
   <ion-content>
     <ion-list>
       <div class="list-page-heading item text-center">
-        <div ng-show="feedback.votes>0">
+        <div ng-show="feedback.userFeedback.votes > 0">
           <h3>Tap an item to vote for it.</h3>
-          <h3>You have {{feedback.votes}} vote<span ng-show="feedback.votes!=1">s</span> left.</h3>
+          <h3>You have {{feedback.votes}} vote<span ng-show="feedback.userFeedback.votes != 1">s</span> left.</h3>
         </div>
-        <div ng-show="feedback.votes==0">
+        <div ng-show="feedback.userFeedback.votes == 0">
           <h3>You're out of votes.</h3>
           <h3>Thanks for your feedback!</h3>
         </div>
       </div>
       <a class="item feedback-list-item item-text-wrap item-icon-left" href
-          ng-click="voteOnItem(item._id)"
-          ng-class="{'active': feedback.voteItems.indexOf(item._id) > -1}"
-          ng-repeat="item in feedbackItems">
+          ng-click="feedback.voteOnItem(item._id)"
+          ng-class="{'active': feedback.userFeedback.voteItems.indexOf(item._id) > -1}"
+          ng-repeat="item in feedback.feedbackItems">
         <h2>
           <i class="icon ion-android-checkmark"></i>
           {{item.name}}

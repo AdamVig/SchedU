@@ -22,7 +22,12 @@ gulp.task('inject-js', function () {
     .pipe(order(['app.js', '*.js', '**/*.js']));
 
   return gulp.src('./www/index.html')
-    .pipe(inject(series(libSources, mainSources), {ignorePath: 'www'}))
+    .pipe(inject(
+        series(libSources, mainSources),
+        {ignorePath: 'www/',
+        relative: true}
+      )
+    )
     .pipe(gulp.dest('./www'));
 });
 

@@ -41,10 +41,15 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     }
   }
 }
-.back-arrow {
+.header-icon {
   position: absolute;
   bottom: 10%;
+}
+.header-icon-left {
   left: 15px;
+}
+.header-icon-right {
+  right: 15px;
 }
 .bar-header .ion-arrow-left-c {
   font-size: 40px;

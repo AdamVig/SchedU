@@ -1,4 +1,4 @@
-services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
+services.factory('DatabaseFactory', ['$http', 'DatabaseConstant', function($http, DatabaseConstant) {
 
   // Enable CORS
   $http.defaults.withCredentials = true;
@@ -14,6 +14,7 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
     }
     return url;
   }
+
   /**
    * Build URL from given parts
    * @param  {string} couchUrl     Complete URL of CouchDB server
@@ -37,7 +38,23 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
    * @param {string} couchUrl     URL of CouchDB server
    * @param {string} databaseName Name of database
    */
-  function SimpleCouch(couchUrl, databaseName) {
+  function SimpleCouch(couchInfo, databaseName) {
+
+    /**
+    * Create session on CouchDB server
+    * @param  {object}  couchInfo Contains url, username, and password
+    * @return {promise}           Fulfilled by {"status": 200} from server
+    */
+    this.createSession = function (couchInfo) {
+      return $http({
+        method: "POST",
+        url: makeRequestUrl(couchInfo.url, "_session"),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data: "name=" + couchInfo.username + "&password=" + couchInfo.password
+      });
+    }
 
     /**
      * Get a document from the database
@@ -47,7 +64,7 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
     this.get = function (docId) {
       return $http({
         method: "GET",
-        url: makeRequestUrl(couchUrl, databaseName, docId)
+        url: makeRequestUrl(couchInfo.url, databaseName, docId)
       });
     };
 
@@ -61,19 +78,19 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
       if (docId) {
         return $http({
           method: "PUT",
-          url: makeRequestUrl(couchUrl, databaseName, docId),
+          url: makeRequestUrl(couchInfo.url, databaseName, docId),
           data: docData
         });
       } else if (docData._id) {
         return $http({
           method: "PUT",
-          url: makeRequestUrl(couchUrl, databaseName, docData._id),
+          url: makeRequestUrl(couchInfo.url, databaseName, docData._id),
           data: docData
         });
       } else {
         return $http({
           method: "POST",
-          url: makeRequestUrl(couchUrl, databaseName),
+          url: makeRequestUrl(couchInfo.url, databaseName),
           data: docData
         });
       }
@@ -88,7 +105,7 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
     this.delete = function (docId, docRev) {
       return $http({
         method: "DELETE",
-        url: makeRequestUrl(couchUrl, databaseName, docId),
+        url: makeRequestUrl(couchInfo.url, databaseName, docId),
         params: { rev: docRev }
       });
     };
@@ -100,17 +117,19 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
     this.getAll = function () {
       return $http({
         method: "GET",
-        url: makeRequestUrl(couchUrl, databaseName, '_all_docs'),
+        url: makeRequestUrl(couchInfo.url, databaseName, '_all_docs'),
         params: { include_docs: true }
       });
     };
+
+    this.createSession(couchInfo);
   }
 
   return {
-    'schedule':  new SimpleCouch(dbUrl, 'schedule'),
-    'user':  new SimpleCouch(dbUrl, 'user'),
-    'feedback':  new SimpleCouch(dbUrl, 'feedback'),
-    'versions':  new SimpleCouch(dbUrl, 'versions')
+    'schedule':  new SimpleCouch(DatabaseConstant, 'schedule'),
+    'user':  new SimpleCouch(DatabaseConstant, 'user'),
+    'feedback':  new SimpleCouch(DatabaseConstant, 'feedback'),
+    'versions':  new SimpleCouch(DatabaseConstant, 'versions')
   };
 
 }]);

@@ -1,17 +1,18 @@
-<div class="item item-divider period-title {{periodLetter}}-period">
-  {{periodLetter | uppercase}} Period
+<div class="period-block period-block-tall {{periodLetter}}-period"
+     ng-class="{'period-block-alternate': registerForm[periodLetter].alternatesClass == true}">
+  {{periodLetter | uppercase}}
 </div>
 <label class="item item-input">
-  <span class="input-label">Class Name:</span>
   <input type="text"
          name="{{periodLetter}}Primary"
+         placeholder="{{periodLetter | uppercase}} Period"
          required
          ng-maxlength="20"
          ng-model="formData[periodLetter].name">
 </label>
 <small class="error item"
        ng-show="registerForm.{{periodLetter}}Primary.$invalid && registerForm.{{periodLetter}}Primary.$dirty">
-  Uh oh! That class name is either too long or too short. Try again.
+  Uh oh! That class name is either too long or too short.
 </small>
 <!-- ALTERNATING CLASS TOGGLE -->
 <div class="item item-toggle">
@@ -26,8 +27,9 @@
 <div ng-show="registerForm[periodLetter].alternatesClass">
   <!-- Alternate Class Name INPUT -->
   <label class="item item-input">
-    <span class="input-label">Alternate Class Name:</span>
-    <input type="text" ng-model="formData[periodLetter].alternate.name">
+    <input type="text"
+           placeholder="{{periodLetter | uppercase}} Period Alternate"
+           ng-model="formData[periodLetter].alternate.name">
   </label>
   <!-- PRIMARY CLASS DAY SELECTION -->
   <div class="item days-selection">

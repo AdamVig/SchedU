@@ -1,13 +1,18 @@
 .period-block {
   width: 40px;
   height: 40px;
-  margin-right: 20px;
   padding-top: 10px;
   float: left;
   text-align: center;
   color: #fff;
   font-weight: bold;
   font-size: 1.25em;
+}
+.period-block-tall {
+  height: 93px;
+}
+.period-block-alternate {
+  height: 318px;
 }
 .a-period {
   background-color: hsla(291, 74%, 65%, 1);

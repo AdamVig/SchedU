@@ -32,7 +32,7 @@ controllers.controller('RegisterController', function($scope, $state, $filter, L
     $scope.formData.phoneNumber = PhoneNumberFactory.parse(phoneNumber);
   });
 
-  $scope.register = function(formData) {
+  $scope.registerUser = function(formData) {
 
     LoadingFactory.show();
 
@@ -53,7 +53,7 @@ controllers.controller('RegisterController', function($scope, $state, $filter, L
       }).catch(function(e) {
         $ionicPopup.show({
           template: 'Something went wrong. Contact ' +
-            'info@getschedu.com if this keeps happening.',
+                    'info@getschedu.com if this keeps happening.',
           title: 'Sorry!',
           scope: $scope,
           buttons: [{
@@ -73,8 +73,8 @@ controllers.controller('RegisterController', function($scope, $state, $filter, L
         LoadingFactory.hide();
         $ionicPopup.show({
           template: 'A user already exists with this phone number. ' +
-            'Is it you? You can either change your phone ' +
-            'number or login using this phone number.',
+                    'Is it you? You can either change your phone ' +
+                    'number or login using this phone number.',
           title: 'Oh no!',
           scope: $scope,
           buttons: [{
@@ -93,7 +93,7 @@ controllers.controller('RegisterController', function($scope, $state, $filter, L
         LoadingFactory.hide();
         $ionicPopup.show({
           template: 'Something went wrong. Contact ' +
-            'info@getschedu.com if this keeps happening.',
+                    'info@getschedu.com if this keeps happening.',
           title: 'Sorry!',
           scope: $scope,
           buttons: [{

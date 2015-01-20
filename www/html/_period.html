@@ -1,43 +1,49 @@
-<!-- INDIVIDUAL PERIOD SECTION -->
-<div class="item item-divider period-title a-period">A Period</div>
-<!-- PRIMARY CLASS NAME INPUT -->
+<div class="item item-divider period-title {{periodLetter}}-period">
+  {{periodLetter | uppercase}} Period
+</div>
 <label class="item item-input">
   <span class="input-label">Class Name:</span>
-  <input type="text" ng-maxlength="20" required ng-model="formData.a.name" name="aPrimary">
+  <input type="text"
+         name="{{periodLetter}}Primary"
+         required
+         ng-maxlength="20"
+         ng-model="formData[periodLetter].name">
 </label>
-<small class="error item" ng-show="registerForm.aPrimary.$invalid && registerForm.aPrimary.$dirty">
+<small class="error item"
+       ng-show="registerForm.{{periodLetter}}Primary.$invalid && registerForm.{{periodLetter}}Primary.$dirty">
   Uh oh! That class name is either too long or too short. Try again.
 </small>
 <!-- ALTERNATING CLASS TOGGLE -->
 <div class="item item-toggle">
   <span class="toggle-label">Alternates with another class</span>
   <label class="toggle">
-    <input type="checkbox" ng-model="aAlternatesClass">
+    <input type="checkbox" ng-model="registerForm[periodLetter].alternatesClass">
     <div class="track">
       <div class="handle"></div>
     </div>
   </label>
 </div>
-<div ng-show="aAlternatesClass">
+<div ng-show="registerForm[periodLetter].alternatesClass">
   <!-- Alternate Class Name INPUT -->
   <label class="item item-input">
     <span class="input-label">Alternate Class Name:</span>
-    <input type="text" ng-model="formData.a.alternate.name">
+    <input type="text" ng-model="formData[periodLetter].alternate.name">
   </label>
   <!-- PRIMARY CLASS DAY SELECTION -->
-  <div class="item">
+  <div class="item days-selection">
     Primary Class Days:
     <div class="day-selector-row">
-      <span ng-repeat="n in [] | range:1:8" ng-init="formData.a.days = []">
+      <span ng-repeat="n in [] | range:1:8"
+            ng-init="formData[periodLetter].days = []">
         <input class="day-selector-radio"
-        type="radio"
-        name="formData.a.days[{{n}}]"
-        id="formData.a.days[{{n}}]"
-        ng-value="n"
-        ng-model="formData.a.days[n-1]"
-        ng-click="deselectDays(n, 'a')">
+               type="radio"
+               name="formData.{{periodLetter}}.days[{{n}}]"
+               id="formData.{{periodLetter}}.days[{{n}}]"
+               ng-value="n"
+               ng-model="formData[periodLetter].days[n-1]"
+               ng-click="deselectDays(n, periodLetter)">
         <label class="day-selector"
-               for="formData.a.days[{{n}}]">
+               for="formData.{{periodLetter}}.days[{{n}}]">
           {{n}}
         </label>
       </span>
@@ -47,21 +53,20 @@
   <div class="item days-selection">
     Alternate Class Days:
     <div class="day-selector-row">
-      <span ng-repeat="n in [] | range:1:8" ng-init="formData.a.alternate.days = []">
+      <span ng-repeat="n in [] | range:1:8"
+            ng-init="formData[periodLetter].alternate.days = []">
         <input class="day-selector-radio"
                type="radio"
-               name="formData.a.days[{{n}}]"
-               id="formData.a.alternate.days[{{n}}]"
+               name="formData.{{periodLetter}}.days[{{n}}]"
+               id="formData.{{periodLetter}}.alternate.days[{{n}}]"
                ng-value="n"
-               ng-model="formData.a.alternate.days[n-1]"
-               ng-click="deselectDays(n, 'a', 'alternate')">
+               ng-model="formData[periodLetter].alternate.days[n-1]"
+               ng-click="deselectDays(n, periodLetter, 'alternate')">
         <label class="day-selector"
-               for="formData.a.alternate.days[{{n}}]">
-            {{n}}
+               for="formData.{{periodLetter}}.alternate.days[{{n}}]">
+          {{n}}
         </label>
       </span>
     </div>
-  </div>
-  <!-- End Alternate Class Day Selection -->
-</div>
-<!-- End Alternate Class -->
+  </div> <!-- End Alternate Class Day Selection -->
+</div> <!-- End Alternate Class -->

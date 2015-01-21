@@ -1,0 +1,62 @@
+@mixin period-border($color) {
+  border-left-width: 30px;
+  border-left-style: solid;
+  border-left-color: $color;
+}
+.day-selector-row {
+  margin-top: 10px;
+}
+.day-selector {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  padding: 3px;
+  background-color: #aaa;
+  color: #fff;
+  font-size: 16px;
+  vertical-align: middle;
+  text-align: center;
+}
+input[type="radio"]:checked + .day-selector {
+  background-color: #085102;
+}
+.day-selector-radio {
+  display: none;
+}
+.item-label {
+  font-size: 14px;
+  font-style: italic;
+}
+.toggle input:checked + .track {
+  border-color: #085102;
+  background-color: #085102;
+}
+.period-container.a-period {
+  @include period-border($a-period-color);
+}
+.period-container.b-period {
+  @include period-border($b-period-color);
+}
+.period-container.c-period {
+  @include period-border($c-period-color);
+}
+.period-container.d-period {
+  @include period-border($d-period-color);
+}
+.period-container.e-period {
+  @include period-border($e-period-color);
+}
+.period-container.f-period {
+  @include period-border($f-period-color);
+}
+.period-container.g-period {
+  @include period-border($g-period-color);
+}
+.period-letter-border {
+  float: left;
+  margin-left: -22px;
+  margin-top: 10px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.25em;
+}

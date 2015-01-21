@@ -7,6 +7,15 @@ $lighter-gray: #eee;
 $bar-height: 85px;
 $logo-top-margin: 15px;
 
+$a-period-color: hsla(291, 74%, 65%, 1);
+$b-period-color: hsla(145, 63%, 49%, 1);
+$c-period-color: hsla(28, 80%, 52%, 1);
+$d-period-color: hsla(283, 39%, 53%, 1);
+$e-period-color: hsla(6, 78%, 57%, 1);
+$f-period-color: hsla(48, 89%, 50%, 1);
+$g-period-color: hsla(204, 70%, 53%, 1);
+$sp-period-color: hsla(210, 29%, 29%, 1);
+
 @mixin transition-out($time) {
   -webkit-transition: all $time ease-in;
           transition: all $time ease-in;
@@ -18,6 +27,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 @import "period-blocks";
+@import "period";
 @import "loader";
 
 /**
@@ -151,34 +161,6 @@ a {
 }
 .ng-invalid {
   border-color: darkred;
-}
-.day-selector-row {
-  margin-top: 10px;
-}
-.day-selector {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  padding: 3px;
-  background-color: #aaa;
-  color: #fff;
-  font-size: 16px;
-  vertical-align: middle;
-  text-align: center;
-}
-.toggle input:checked + .track {
-  border-color: #085102;
-  background-color: #085102;
-}
-input[type="radio"]:checked + .day-selector {
-  background-color: #085102;
-}
-.day-selector-radio {
-  display: none;
-}
-.toggle-label {
-  font-size: 14px;
-  font-style: italic;
 }
 .label-invalid {
   color: darkred;

@@ -8,33 +8,27 @@
   font-weight: bold;
   font-size: 1.25em;
 }
-.period-block-tall {
-  height: 93px;
+.period-block.a-period-block {
+  background-color: $a-period-color;
 }
-.period-block-alternate {
-  height: 318px;
+.period-block.b-period-block {
+  background-color: $b-period-color;
 }
-.a-period {
-  background-color: hsla(291, 74%, 65%, 1);
+.period-block.c-period-block {
+  background-color: $c-period-color;
 }
-.b-period {
-  background-color: hsla(145, 63%, 49%, 1);
+.period-block.d-period-block {
+  background-color: $d-period-color;
 }
-.c-period {
-  background-color: hsla(28, 80%, 52%, 1);
+.period-block.e-period-block {
+  background-color: $e-period-color;
 }
-.d-period {
-  background-color: hsla(283, 39%, 53%, 1);
+.period-block.f-period-block {
+  background-color: $f-period-color;
 }
-.e-period {
-  background-color: hsla(6, 78%, 57%, 1);
+.period-block.g-period-block {
+  background-color: $g-period-color;
 }
-.f-period {
-  background-color: hsla(48, 89%, 50%, 1);
-}
-.g-period {
-  background-color: hsla(204, 70%, 53%, 1);
-}
-.sp-period {
-  background-color: hsla(210, 29%, 29%, 1);
+.period-block.sp-perio-blockd {
+  background-color: $sp-period-color;
 }

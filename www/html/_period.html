@@ -23,7 +23,7 @@
     </div>
   </label>
 </div>
-<div ng-show="registerForm[periodLetter].alternatesClass">
+<div ng-show="registerForm[periodLetter].alternatesClass || formData[periodLetter].alternate.name">
   <!-- PRIMARY CLASS DAY SELECTION -->
   <div class="item days-selection">
     <span class="item-label">{{periodLetter | uppercase}} Period Days:</span>

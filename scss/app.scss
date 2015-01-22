@@ -60,14 +60,14 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   position: absolute;
   bottom: 10%;
 }
+.header-icon > i {
+  font-size: 40px;
+}
 .header-icon-left {
   left: 15px;
 }
 .header-icon-right {
   right: 15px;
-}
-.bar-header .ion-arrow-left-c {
-  font-size: 40px;
 }
 .button.button-schedu,
 .button.button-schedu-outline.activated  {

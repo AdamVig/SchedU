@@ -14,7 +14,7 @@ services.factory('RegistrationFactory', function ($filter, UsageFactory) {
         userData[periodLetter].name = $filter('sentencecase')(userData[periodLetter].name);
 
         // Class has an alternate
-        if (userData[periodLetter].alternate.name) {
+        if (userData[periodLetter].alternate) {
 
           // Capitalize alternate class name
           userData[periodLetter].alternate.name = $filter('sentencecase')(userData[periodLetter].alternate.name);

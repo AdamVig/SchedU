@@ -7,14 +7,16 @@ $lighter-gray: #eee;
 $bar-height: 85px;
 $logo-top-margin: 15px;
 
-$a-period-color: hsla(291, 74%, 65%, 1);
-$b-period-color: hsla(145, 63%, 49%, 1);
-$c-period-color: hsla(28, 80%, 52%, 1);
-$d-period-color: hsla(283, 39%, 53%, 1);
-$e-period-color: hsla(6, 78%, 57%, 1);
-$f-period-color: hsla(48, 89%, 50%, 1);
-$g-period-color: hsla(204, 70%, 53%, 1);
-$sp-period-color: hsla(210, 29%, 29%, 1);
+$period-colors: (
+  a: hsla(291, 74%, 65%, 1),
+  b: hsla(145, 63%, 49%, 1),
+  c: hsla(28, 80%, 52%, 1),
+  d: hsla(283, 39%, 53%, 1),
+  e: hsla(6, 78%, 57%, 1),
+  f: hsla(48, 89%, 50%, 1),
+  g: hsla(204, 70%, 53%, 1),
+  sp: hsla(210, 29%, 29%, 1)
+);
 
 @mixin transition-out($time) {
   -webkit-transition: all $time ease-in;
@@ -25,7 +27,7 @@ $sp-period-color: hsla(210, 29%, 29%, 1);
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
-@import "www/lib/ionic/scss/ionic";
+@import "../www/lib/ionic/scss/ionic";
 @import "period-blocks";
 @import "period";
 @import "loader";

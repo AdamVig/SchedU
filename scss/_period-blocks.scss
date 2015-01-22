@@ -8,27 +8,8 @@
   font-weight: bold;
   font-size: 1.25em;
 }
-.period-block.a-period-block {
-  background-color: $a-period-color;
-}
-.period-block.b-period-block {
-  background-color: $b-period-color;
-}
-.period-block.c-period-block {
-  background-color: $c-period-color;
-}
-.period-block.d-period-block {
-  background-color: $d-period-color;
-}
-.period-block.e-period-block {
-  background-color: $e-period-color;
-}
-.period-block.f-period-block {
-  background-color: $f-period-color;
-}
-.period-block.g-period-block {
-  background-color: $g-period-color;
-}
-.period-block.sp-perio-blockd {
-  background-color: $sp-period-color;
+@each $letter, $color in $period-colors {
+  .period-block.#{$letter}-period-block {
+    background-color: $color;
+  }
 }

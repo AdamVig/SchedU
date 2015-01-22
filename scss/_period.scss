@@ -31,31 +31,15 @@ input[type="radio"]:checked + .day-selector {
   border-color: #085102;
   background-color: #085102;
 }
-.period-container.a-period {
-  @include period-border($a-period-color);
-}
-.period-container.b-period {
-  @include period-border($b-period-color);
-}
-.period-container.c-period {
-  @include period-border($c-period-color);
-}
-.period-container.d-period {
-  @include period-border($d-period-color);
-}
-.period-container.e-period {
-  @include period-border($e-period-color);
-}
-.period-container.f-period {
-  @include period-border($f-period-color);
-}
-.period-container.g-period {
-  @include period-border($g-period-color);
+@each $letter, $color in $period-colors {
+  .period-container.#{$letter}-period {
+    @include period-border($color);
+  }
 }
 .period-letter-border {
   float: left;
   margin-left: -22px;
-  margin-top: 10px;
+  margin-top: 11px;
   color: #fff;
   font-weight: bold;
   font-size: 1.25em;

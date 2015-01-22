@@ -2,7 +2,7 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     bower = require('bower'),
     concat = require('gulp-concat'),
-    sass = require('gulp-sass'),
+    sass = require('gulp-ruby-sass'),
     minifyCss = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     inject = require('gulp-inject'),
@@ -33,7 +33,7 @@ gulp.task('inject-js', function () {
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/app.scss')
-    .pipe(sass({outputStyle: 'nested'}))
+    .pipe(sass({style: 'nested', 'sourcemap=none': true }))
     .pipe(gulp.dest('./www/css/'))
     .pipe(minifyCss({
       keepSpecialComments: 0

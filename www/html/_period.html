@@ -16,7 +16,7 @@
 </small>
 <!-- ALTERNATING CLASS TOGGLE -->
 <div class="item item-toggle">
-  <span class="toggle-label">Alternates with another class</span>
+  <span class="item-label">This class alternates</span>
   <label class="toggle">
     <input type="checkbox" ng-model="registerForm[periodLetter].alternatesClass">
     <div class="track">
@@ -25,15 +25,9 @@
   </label>
 </div>
 <div ng-show="registerForm[periodLetter].alternatesClass">
-  <!-- Alternate Class Name INPUT -->
-  <label class="item item-input">
-    <input type="text"
-           placeholder="{{periodLetter | uppercase}} Period Alternate"
-           ng-model="formData[periodLetter].alternate.name">
-  </label>
   <!-- PRIMARY CLASS DAY SELECTION -->
   <div class="item days-selection">
-    Primary Class Days:
+    <span class="item-label">{{periodLetter | uppercase}} Period Days:</span>
     <div class="day-selector-row">
       <span ng-repeat="n in [] | range:1:8"
             ng-init="formData[periodLetter].days = []">
@@ -51,9 +45,15 @@
       </span>
     </div>
   </div>
+  <!-- Alternate Class Name INPUT -->
+  <label class="item item-input">
+    <input type="text"
+           placeholder="{{periodLetter | uppercase}} Period Alternate"
+           ng-model="formData[periodLetter].alternate.name">
+  </label>
   <!-- OTHER CLASS DAY SELECTION -->
   <div class="item days-selection">
-    Alternate Class Days:
+    <span class="item-label">{{periodLetter | uppercase}} Period Alternate Days:</span>
     <div class="day-selector-row">
       <span ng-repeat="n in [] | range:1:8"
             ng-init="formData[periodLetter].alternate.days = []">

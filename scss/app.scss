@@ -5,7 +5,7 @@ $light-gray: #c8c9c7;
 $lighter-gray: #eee;
 
 $bar-height: 85px;
-$logo-top-margin: 15px;
+$logo-top-margin: 20px;
 
 $period-colors: (
   a: hsla(291, 74%, 65%, 1),
@@ -40,6 +40,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 .bar-header .title {
   margin-top: $logo-top-margin;
+}
+.title-image {
+  height: 60px;
 }
 .platform-ios.platform-cordova {
   // iOS7/8 has a status bar which sits on top of the header.

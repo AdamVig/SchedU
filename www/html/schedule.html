@@ -11,6 +11,13 @@
            height="60"
            alt="SchedU Logo">
     </h1>
+    <div class="buttons">
+      <a href="#/edit">
+        <button class="button button-clear header-icon header-icon-right">
+          <i class="ion-edit"></i>
+        </button>
+      </a>
+    </div>
   </ion-header-bar>
   <ion-content has-header="true">
     <ion-list class="class-list">
@@ -24,7 +31,7 @@
       <ion-item class="schedule-item"
                 ng-repeat="class in schedule.classOrder">
 
-        <div class="period-block {{class.letter | lowercase}}-period">
+        <div class="period-block {{class.letter | lowercase}}-period-block">
             {{class.letter}}
         </div>
         <h2 class="class-name">

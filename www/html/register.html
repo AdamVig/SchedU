@@ -16,6 +16,7 @@
   </ion-header-bar>
   <ion-content has-header="true">
     <form name="registerForm"
+          class="register-form"
           novalidate
           ng-submit="registerUser(formData)"
           ng-controller="RegisterController">
@@ -58,9 +59,9 @@
       </div>
       <!-- PERIOD SECTIONS CONTAINER -->
       <div class="list">
-        <div class="period-container"
+        <div class="period-container {{periodLetter}}-period"
              ng-repeat="periodLetter in ['a', 'b', 'c', 'd', 'e', 'f', 'g']">
-          <period letter="periodLetter"></period>
+          <period></period>
         </div>
         <div class="center-container">
           <button class="button button-schedu button-register center-content"

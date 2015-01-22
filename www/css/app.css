@@ -8068,9 +8068,6 @@ a.button {
 .period-block.sp-period-block {
   background-color: #354a5f; }
 
-.period-block.sp-period-block {
-  background-color: #354a5f; }
-
 .day-selector-row {
   margin-top: 10px; }
 
@@ -8204,23 +8201,26 @@ input[type="radio"]:checked + .day-selector {
   background-image: none; }
 
 .bar-header .title {
-  margin-top: 15px; }
+  margin-top: 20px; }
+
+.title-image {
+  height: 60px; }
 
 .platform-ios.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
-  margin-top: 35px; }
+  margin-top: 40px; }
 
 .header-icon {
   position: absolute;
   bottom: 10%; }
+
+.header-icon > i {
+  font-size: 40px; }
 
 .header-icon-left {
   left: 15px; }
 
 .header-icon-right {
   right: 15px; }
-
-.bar-header .ion-arrow-left-c {
-  font-size: 40px; }
 
 .button.button-schedu,
 .button.button-schedu-outline.activated {
@@ -8251,6 +8251,12 @@ input[type="radio"]:checked + .day-selector {
 .date-header {
   padding: 10px;
   height: 45px; }
+
+.schedule .header-icon-right {
+  padding-top: 10px; }
+
+.schedule .header-icon > i.ion-edit {
+  font-size: 30px; }
 
 .class-list .schedule-item {
   padding-top: 10px;

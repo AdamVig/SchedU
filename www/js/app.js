@@ -31,10 +31,10 @@ schedu.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
       templateUrl: 'html/register.html'
     })
 
-    .state('register-new', {
-      url: '/register-new',
-      templateUrl: 'html/register-new.html',
-      controller: 'RegisterController'
+    .state('edit', {
+      url: '/edit',
+      templateUrl: 'html/edit.html',
+      controller: 'EditController as edit'
     });
 
   $urlRouterProvider.otherwise('/schedule');

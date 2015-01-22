@@ -1,0 +1,36 @@
+<ion-view>
+  <ion-header-bar align-title="center">
+    <div class="buttons">
+      <a href="#/schedule" class="reverse">
+        <button class="button button-clear header-icon header-icon-left">
+          <i class="ion-arrow-left-c"></i>
+        </button>
+      </a>
+    </div>
+    <h1 class="title">
+      <img class="title-image"
+           src="img/logo.svg"
+           height="60"
+           alt="SchedU Logo">
+    </h1>
+  </ion-header-bar>
+  <ion-content has-header="true">
+    <ion-list class="class-list">
+      <div class="list-page-heading item text-center">
+        <h3>Edit your classes.</h3>
+        <h3>Don't forget to save!</h3>
+      </div>
+      <div class="period-container {{periodLetter}}-period"
+           ng-repeat="(periodLetter, currentClass) in edit.userClasses">
+        <period></period>
+      </div>
+      <div class="center-container">
+        <button class="button button-schedu button-register center-content"
+          type="submit"
+          ng-disabled="registerForm.$invalid">
+          Save my changes!
+        </button>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-view>

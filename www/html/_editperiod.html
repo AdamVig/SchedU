@@ -2,9 +2,14 @@
   {{periodLetter | uppercase}}
 </div>
 <label class="item item-input">
-  <input type="text" name="{{periodLetter}}.primary" placeholder="{{periodLetter | uppercase}} Period" required ng-maxlength="20" ng-model="currentClass.name">
+  <input type="text"
+    name="{{periodLetter}}Primary"
+    placeholder="{{periodLetter | uppercase}} Period"
+    required
+    ng-maxlength="20"
+    ng-model="currentClass.name">
 </label>
-<small class="error item" ng-show="currentClassForm[{{periodLetter}}].primary.$invalid && currentClassForm[{{periodLetter}}].primary.$dirty">
+<small class="error item" ng-show="editForm.{{periodLetter}}Primary.$invalid && editForm.{{periodLetter}}Primary.$dirty">
   Uh oh! That class name is either too long or too short.
 </small>
 <!-- ALTERNATING CLASS TOGGLE -->
@@ -39,7 +44,9 @@
   </div>
   <!-- Alternate Class Name INPUT -->
   <label class="item item-input">
-    <input type="text" placeholder="{{periodLetter | uppercase}} Period Alternate" ng-model="currentClass.alternate.name">
+    <input type="text"
+      placeholder="{{periodLetter | uppercase}} Period Alternate"
+      ng-model="currentClass.alternate.name">
   </label>
   <!-- OTHER CLASS DAY SELECTION -->
   <div class="item days-selection">

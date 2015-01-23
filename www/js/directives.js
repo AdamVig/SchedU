@@ -5,14 +5,13 @@ directives.directive('period', [function () {
   }
 }])
 
-.directive('edit-period', [function () {
+.directive('editPeriod', [function () {
   return {
     restrict: 'E',
     require: '^form',
     scope: {
-      periodLetter: '@',
-      currentClass: '=',
-      currentClassForm: '='
+      periodLetter: '=',
+      currentClass: '='
     },
     templateUrl: 'html/_editperiod.html'
   }

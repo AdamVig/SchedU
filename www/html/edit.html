@@ -25,9 +25,8 @@
             ng-submit="saveChanges()">
         <div class="period-container {{periodLetter}}-period"
              ng-repeat="(periodLetter, currentClass) in edit.formData">
-          <edit-period period-letter="{{periodLetter}}"
-                  current-class="currentClass"
-                  current-class-form="editForm">
+          <edit-period period-letter="periodLetter"
+            current-class="currentClass">
           </edit-period>
         </div>
         <div class="center-container">

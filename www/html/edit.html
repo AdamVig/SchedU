@@ -20,17 +20,24 @@
         <h3>Edit your classes.</h3>
         <h3>Don't forget to save!</h3>
       </div>
-      <div class="period-container {{periodLetter}}-period"
-           ng-repeat="(periodLetter, currentClass) in formData">
-        <period></period>
-      </div>
-      <div class="center-container">
-        <button class="button button-schedu button-register center-content"
-          type="submit"
-          ng-disabled="registerForm.$invalid">
-          Save my changes!
-        </button>
-      </div>
+      <form name="editForm"
+            novalidate
+            ng-submit="saveChanges()">
+        <div class="period-container {{periodLetter}}-period"
+             ng-repeat="(periodLetter, currentClass) in edit.formData">
+          <edit-period period-letter="{{periodLetter}}"
+                  current-class="currentClass"
+                  current-class-form="editForm">
+          </edit-period>
+        </div>
+        <div class="center-container">
+          <button class="button button-schedu button-register center-content"
+            type="submit"
+            ng-disabled="editForm.$invalid">
+            Save my changes!
+          </button>
+        </div>
+      </form>
     </ion-list>
   </ion-content>
 </ion-view>

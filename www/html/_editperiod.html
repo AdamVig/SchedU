@@ -1,0 +1,65 @@
+<div class="period-letter-border">
+  {{periodLetter | uppercase}}
+</div>
+<label class="item item-input">
+  <input type="text" name="{{periodLetter}}.primary" placeholder="{{periodLetter | uppercase}} Period" required ng-maxlength="20" ng-model="currentClass.name">
+</label>
+<small class="error item" ng-show="currentClassForm[{{periodLetter}}].primary.$invalid && currentClassForm[{{periodLetter}}].primary.$dirty">
+  Uh oh! That class name is either too long or too short.
+</small>
+<!-- ALTERNATING CLASS TOGGLE -->
+<div class="item item-toggle">
+  <span class="item-label">This class alternates</span>
+  <label class="toggle">
+    <input type="checkbox" ng-model="registerForm[periodLetter].alternatesClass" ng-init="currentClass.alternate.name || false">
+    <div class="track">
+      <div class="handle"></div>
+    </div>
+  </label>
+</div>
+<div ng-show="registerForm[periodLetter].alternatesClass || currentClass.alternate.name">
+  <!-- PRIMARY CLASS DAY SELECTION -->
+  <div class="item days-selection">
+    <span class="item-label">{{periodLetter | uppercase}} Period Days:</span>
+    <div class="day-selector-row">
+      <span ng-repeat="n in [] | range:1:8" ng-init="currentClass.days = currentClass.days || []">
+        <input class="day-selector-radio"
+          type="radio"
+          name="formData.{{periodLetter}}.days[{{n}}]"
+          id="formData.{{periodLetter}}.days[{{n}}]"
+          ng-value="n"
+          ng-model="currentClass.days[n-1]"
+          ng-click="deselectDays(n, periodLetter)">
+        <label class="day-selector"
+          for="formData.{{periodLetter}}.days[{{n}}]">
+          {{n}}
+        </label>
+      </span>
+    </div>
+  </div>
+  <!-- Alternate Class Name INPUT -->
+  <label class="item item-input">
+    <input type="text" placeholder="{{periodLetter | uppercase}} Period Alternate" ng-model="currentClass.alternate.name">
+  </label>
+  <!-- OTHER CLASS DAY SELECTION -->
+  <div class="item days-selection">
+    <span class="item-label">{{periodLetter | uppercase}} Period Alternate Days:</span>
+    <div class="day-selector-row">
+      <span ng-repeat="n in [] | range:1:8" ng-init="currentClass.alternate.days = currentClass.alternate.days || []">
+        <input class="day-selector-radio"
+          type="radio"
+          name="formData.{{periodLetter}}.days[{{n}}]"
+          id="formData.{{periodLetter}}.alternate.days[{{n}}]"
+          ng-value="n"
+          ng-model="currentClass.alternate.days[n-1]"
+          ng-click="deselectDays(n, periodLetter, 'alternate')">
+        <label class="day-selector"
+          for="formData.{{periodLetter}}.alternate.days[{{n}}]">
+          {{n}}
+        </label>
+      </span>
+    </div>
+  </div>
+  <!-- End Alternate Class Day Selection -->
+</div>
+<!-- End Alternate Class -->

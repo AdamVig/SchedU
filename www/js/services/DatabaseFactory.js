@@ -54,7 +54,7 @@ services.factory('DatabaseFactory', ['$http', 'DatabaseConstant', function($http
         },
         data: "name=" + couchInfo.username + "&password=" + couchInfo.password
       });
-    }
+    };
 
     /**
      * Get a document from the database

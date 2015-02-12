@@ -1,0 +1,17 @@
+.back-button {
+  margin-left: 10px;
+  font-size: 1.25em;
+}
+.feedback-list-item.active {
+  background-color: $schedu-green;
+}
+.feedback-list-item.active h2 {
+  color: $white;
+}
+.feedback-list-item h2 {
+  font-size: 20px;
+}
+.feedback-list-item .ion-android-checkmark {
+  color: $white;
+  font-size: 1.5em;
+}

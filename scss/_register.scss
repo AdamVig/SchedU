@@ -1,0 +1,28 @@
+.error {
+  color: $error-color;
+}
+
+.error .tel-example {
+  font-weight: bold;
+}
+.ng-invalid {
+  border-color: $error-color;
+}
+.label-invalid {
+  color: $error-color;
+  font-style: italic;
+}
+.button.button-register {
+  width: 225px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+.error.item {
+  padding: 5px;
+  overflow: inherit;
+  text-overflow: inherit;
+  white-space: normal;
+}
+.register-form .item-input {
+  height: 40px;
+}

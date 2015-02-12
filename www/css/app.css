@@ -8068,10 +8068,11 @@ a.button {
 .period-block.sp-period-block {
   background-color: #354a5f; }
 
-.day-selector-row {
-  margin-top: 10px; }
+period-day-selector {
+  margin-top: 10px;
+  display: block; }
 
-.day-selector {
+period-day-selector > button {
   display: inline-block;
   width: 30px;
   height: 30px;
@@ -8080,13 +8081,21 @@ a.button {
   color: #fff;
   font-size: 16px;
   vertical-align: middle;
-  text-align: center; }
-
-input[type="radio"]:checked + .day-selector {
-  background-color: #085102; }
-
-.day-selector-radio {
-  display: none; }
+  text-align: center;
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+  outline: none; }
+  period-day-selector > button:active {
+    box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.25);
+    background: #9d9d9d; }
+  period-day-selector > button.selected {
+    background-color: #215732; }
+  period-day-selector > button.selected:active {
+    box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.25);
+    background: #1a4527; }
 
 .item-label {
   font-size: 14px;
@@ -8194,131 +8203,8 @@ input[type="radio"]:checked + .day-selector {
     height: 100%; }
   100% {
     height: 0; } }
-/**
- * General Styles
- */
-.bar {
-  background-image: none; }
-
-.bar-header .title {
-  margin-top: 20px; }
-
-.title-image {
-  height: 60px; }
-
-.platform-ios.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
-  margin-top: 40px; }
-
-.header-icon {
-  position: absolute;
-  bottom: 10%; }
-
-.header-icon > i {
-  font-size: 40px; }
-
-.header-icon-left {
-  left: 15px; }
-
-.header-icon-right {
-  right: 15px; }
-
-.button.button-schedu,
-.button.button-schedu-outline.activated {
-  border-color: #215127;
-  background-color: #215127;
-  color: #fff; }
-
-.button.button-schedu-outline,
-.button.button-schedu.activated {
-  border-color: #215127;
-  background-color: #fff;
-  color: #000; }
-
-.button.button-schedu-outline.activated,
-.button.button-schedu.activated {
-  box-shadow: inset 3px 3px 10px rgba(0, 0, 0, 0.3); }
-
-.list-page-heading {
-  padding-top: 5px;
-  padding-bottom: 5px; }
-
-.list-page-heading h3 {
-  font-size: 1.5em; }
-
-/**
- * Schedule Page
- */
-.date-header {
-  padding: 10px;
-  height: 45px; }
-
-.schedule .header-icon-right {
-  padding-top: 10px; }
-
-.schedule .header-icon > i.ion-edit {
-  font-size: 30px; }
-
-.class-list .schedule-item {
-  padding-top: 10px;
-  padding-bottom: 5px; }
-
-.schedule-item h2 {
-  padding-top: 5px; }
-
-.class-list .class-name,
-.class-list h2 {
-  font-size: 1.5em;
-  padding-left: 20px; }
-
-.schedu-icon-block {
-  padding-top: 0; }
-
-/**
- * Feedback Page
- */
-.back-button {
-  margin-left: 10px;
-  font-size: 1.25em; }
-
-.feedback-list-item.active {
-  background-color: #215127; }
-
-.feedback-list-item.active h2 {
-  color: white; }
-
-.feedback-list-item h2 {
-  font-size: 20px; }
-
-.feedback-list-item .ion-android-checkmark {
-  color: white;
-  font-size: 1.5em; }
-
-/**
- * Login Page
- */
-.login-logo {
-  width: 250px;
-  margin-top: 25px;
-  margin-bottom: 5px; }
-
-a {
-  text-decoration: none; }
-
-.login-container {
-  margin-top: 100px; }
-
-.register-description {
-  margin-top: 25px; }
-
-/**
- * Login/Register Forms
- */
 .error {
   color: darkred; }
-
-.login-error {
-  margin-bottom: 10px;
-  font-size: 1em; }
 
 .error .tel-example {
   font-weight: bold; }
@@ -8344,9 +8230,6 @@ a {
 .register-form .item-input {
   height: 40px; }
 
-/**
- * Utility
- */
 .center-container {
   text-align: center; }
 
@@ -8368,3 +8251,114 @@ a {
 
 .text-right {
   text-align: right; }
+
+.bar {
+  background-image: none; }
+
+.bar-header .title {
+  margin-top: 20px; }
+
+.title-image {
+  height: 60px; }
+
+.platform-ios.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
+  margin-top: 40px; }
+
+.header-icon {
+  position: absolute;
+  bottom: 10%; }
+
+.header-icon > i {
+  font-size: 40px; }
+
+.header-icon-left {
+  left: 15px; }
+
+.header-icon-right {
+  right: 15px; }
+
+.date-header {
+  padding: 10px;
+  height: 45px; }
+
+.schedule .header-icon-right {
+  padding-top: 10px; }
+
+.schedule .header-icon > i.ion-edit {
+  font-size: 30px; }
+
+.class-list .schedule-item {
+  padding-top: 10px;
+  padding-bottom: 5px; }
+
+.schedule-item h2 {
+  padding-top: 5px; }
+
+.class-list .class-name,
+.class-list h2 {
+  font-size: 1.5em;
+  padding-left: 20px; }
+
+.schedu-icon-block {
+  padding-top: 0; }
+
+.login-logo {
+  width: 250px;
+  margin-top: 25px;
+  margin-bottom: 5px; }
+
+a {
+  text-decoration: none; }
+
+.login-container {
+  margin-top: 100px; }
+
+.register-description {
+  margin-top: 25px; }
+
+.login-error {
+  margin-bottom: 10px;
+  font-size: 1em; }
+
+.back-button {
+  margin-left: 10px;
+  font-size: 1.25em; }
+
+.feedback-list-item.active {
+  background-color: #215732; }
+
+.feedback-list-item.active h2 {
+  color: #fff; }
+
+.feedback-list-item h2 {
+  font-size: 20px; }
+
+.feedback-list-item .ion-android-checkmark {
+  color: #fff;
+  font-size: 1.5em; }
+
+/**
+ * General Styles
+ */
+.button.button-schedu,
+.button.button-schedu-outline.activated {
+  border-color: #215732;
+  background-color: #215732;
+  color: #fff; }
+
+.button.button-schedu-outline,
+.button.button-schedu.activated {
+  border-color: #215732;
+  background-color: #fff;
+  color: #000; }
+
+.button.button-schedu-outline.activated,
+.button.button-schedu.activated {
+  box-shadow: inset 3px 3px 10px rgba(0, 0, 0, 0.3); }
+
+.list-page-heading {
+  padding-top: 5px;
+  padding-bottom: 5px; }
+
+.list-page-heading h3 {
+  font-size: 1.5em; }

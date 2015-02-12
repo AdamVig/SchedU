@@ -1,0 +1,27 @@
+$schedu-green: #215732;
+$schedu-green-half-opacity: rgba(33, 87, 50, 0.5);
+$darker-gray: #aaa;
+$light-gray: #c8c9c7;
+$lighter-gray: #eee;
+$white: #fff;
+$black: #000;
+$error-color: darkred;
+
+$bar-height: 85px;
+$logo-top-margin: 20px;
+
+$period-colors: (
+  a: hsla(291, 74%, 65%, 1),
+  b: hsla(145, 63%, 49%, 1),
+  c: hsla(28, 80%, 52%, 1),
+  d: hsla(283, 39%, 53%, 1),
+  e: hsla(6, 78%, 57%, 1),
+  f: hsla(48, 89%, 50%, 1),
+  g: hsla(204, 70%, 53%, 1),
+  sp: hsla(210, 29%, 29%, 1)
+);
+
+@mixin transition-out($time) {
+  -webkit-transition: all $time ease-in;
+          transition: all $time ease-in;
+}
